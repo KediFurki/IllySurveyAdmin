@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 // Filter all requests to "/admin", "/index.jsp", and "/" endpoints
-@WebFilter(urlPatterns = { "/admin", "/index.jsp", "/" })
+// @WebFilter(urlPatterns = { "/admin", "/index.jsp", "/" })
 public class AuthFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) 

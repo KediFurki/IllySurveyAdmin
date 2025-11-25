@@ -209,6 +209,23 @@
             outline: none;
         }
 
+        .filter-card .uk-select {
+            border-radius: 8px;
+            border: 2px solid #e8e8e8;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            background: #fafafa;
+            color: #333;
+        }
+
+        .filter-card .uk-select:focus {
+            border-color: var(--illy-red);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(217, 56, 30, 0.1);
+            outline: none;
+        }
+
         /* ============ Button Styles ============ */
         .btn-filter {
             background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%);
@@ -797,12 +814,49 @@
                         </div>
                     </div>
                     <div>
+                        <label class="uk-form-label" for="type">
+                            <span uk-icon="icon: tag; ratio: 0.9"></span> Tipo Sondaggio
+                        </label>
+                        <div class="uk-form-controls">
+                            <select class="uk-select" id="type" name="type">
+                                <option value="">Tutti i Tipi</option>
+                                <option value="BtoB" ${param.type == 'BtoB' ? 'selected' : ''}>BtoB</option>
+                                <option value="BtoC" ${param.type == 'BtoC' ? 'selected' : ''}>BtoC</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="uk-form-label" for="score">
+                            <span uk-icon="icon: star; ratio: 0.9"></span> Valutazione
+                        </label>
+                        <div class="uk-form-controls">
+                            <select class="uk-select" id="score" name="score">
+                                <option value="">Tutte le Valutazioni</option>
+                                <option value="0-5" ${param.score == '0-5' ? 'selected' : ''}>Bassa (0-5)</option>
+                                <option value="6-10" ${param.score == '6-10' ? 'selected' : ''}>Alta (6-10)</option>
+                                <option value="none" ${param.score == 'none' ? 'selected' : ''}>Senza Voto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="uk-form-label" for="audio">
+                            <span uk-icon="icon: microphone; ratio: 0.9"></span> Audio
+                        </label>
+                        <div class="uk-form-controls">
+                            <select class="uk-select" id="audio" name="audio">
+                                <option value="">Tutti</option>
+                                <option value="yes" ${param.audio == 'yes' ? 'selected' : ''}>Con Audio</option>
+                                <option value="no" ${param.audio == 'no' ? 'selected' : ''}>Senza Audio</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
                         <label class="uk-form-label">&nbsp;</label>
                         <div class="uk-form-controls uk-flex uk-flex-between uk-gap">
                             <button type="submit" class="btn-filter">
                                 <span uk-icon="icon: search; ratio: 0.9"></span> Filtra
                             </button>
-                            <a href="admin?action=export&startDate=${startDate}&endDate=${endDate}" class="btn-export" uk-tooltip="title: Scarica i dati in formato CSV">
+                            <a href="admin?action=export&startDate=${startDate}&endDate=${endDate}&type=${param.type}&score=${param.score}&audio=${param.audio}" class="btn-export" uk-tooltip="title: Scarica i dati in formato CSV">
                                 <span uk-icon="icon: download; ratio: 0.9"></span> CSV
                             </a>
                         </div>
@@ -864,6 +918,9 @@
                                 </td>
                                 <td>
                                     <c:choose>
+                                        <c:when test="${item.score == null || item.score == ''}">
+                                            <span class="score-badge" style="background: #f0f0f0; color: #999;" uk-tooltip="title: Senza voto">-</span>
+                                        </c:when>
                                         <c:when test="${item.score < 6}">
                                             <span class="score-badge score-low" uk-tooltip="title: Valutazione bassa (minore di 6)">${item.score}</span>
                                         </c:when>
