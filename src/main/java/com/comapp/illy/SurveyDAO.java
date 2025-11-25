@@ -3,6 +3,7 @@ package com.comapp.illy;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -33,25 +34,37 @@ public class SurveyDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(QUERY)) {
             
+            if (conn == null) {
+                logger.error("Failed to establish database connection");
+                return list;
+            }
+            
             ps.setString(1, startParam);
             ps.setString(2, endParam);
             
-            logger.info("Executing query from " + startDate + " to " + endDate);
+            logger.info("Executing query from {} to {}", startDate, endDate);
             
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new SurveyBean(
-                    rs.getString("conversationid"),
-                    rs.getString("conversationstart"),
-                    rs.getString("ani"),
-                    rs.getString("surveyType"),
-                    rs.getString("surveyScore"),
-                    rs.getString("hasAudio")
-                ));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new SurveyBean(
+                        rs.getString("conversationid"),
+                        rs.getString("conversationstart"),
+                        rs.getString("ani"),
+                        rs.getString("surveyType"),
+                        rs.getString("surveyScore"),
+                        rs.getString("hasAudio")
+                    ));
+                }
             }
+            
+            logger.info("Successfully retrieved {} records", list.size());
+            
+        } catch (SQLException e) {
+            logger.error("Database error while fetching surveys from {} to {}", startDate, endDate, e);
         } catch (Exception e) {
-            logger.error("Error fetching data", e);
+            logger.error("Unexpected error while fetching surveys", e);
         }
+        
         return list;
     }
 }

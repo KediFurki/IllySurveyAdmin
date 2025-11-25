@@ -12,8 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-// "/admin" ve "/index.jsp" sayfalarına giden herkesi kontrol et
-// @WebFilter(urlPatterns = { "/admin", "/index.jsp", "/" })
+// Filter all requests to "/admin", "/index.jsp", and "/" endpoints
+@WebFilter(urlPatterns = { "/admin", "/index.jsp", "/" })
 public class AuthFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) 
@@ -23,14 +23,14 @@ public class AuthFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);
 
-        // Kullanıcı zaten giriş yapmış mı?
+        // Check if user is already logged in
         boolean isLoggedIn = (session != null && session.getAttribute("genesysUser") != null);
         
-        // Giriş yapmışsa DEVAM ET, yapmamışsa LOGIN'e gönder
+        // If logged in, continue the request chain; otherwise redirect to login
         if (isLoggedIn) {
             chain.doFilter(req, res);
         } else {
-            // Login Servlet'e yönlendir
+            // Redirect to login page
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
     }
