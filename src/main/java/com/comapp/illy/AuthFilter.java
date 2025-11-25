@@ -31,7 +31,7 @@ public class AuthFilter implements Filter {
             chain.doFilter(req, res);
         } else {
             // Login Servlet'e yönlendir
-            response.sendRedirect(request.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
     }
     
