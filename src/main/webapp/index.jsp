@@ -178,6 +178,22 @@
             font-size: 1.1rem;
             letter-spacing: 0.5px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.3s ease;
+        }
+
+        .filter-header:hover {
+            background: linear-gradient(135deg, var(--illy-dark-red) 0%, #9a2612 100%);
+        }
+
+        .filter-toggle-icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .filter-toggle-icon.closed {
+            transform: rotate(180deg);
         }
 
         .filter-card .uk-card-body {
@@ -188,9 +204,19 @@
             font-weight: 600;
             color: var(--illy-dark);
             margin-bottom: 0.75rem;
-            font-size: 0.95rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            height: auto;
+            line-height: 1.4;
+        }
+
+        .filter-card .uk-form-controls {
+            margin-top: 0.5rem;
+            margin-bottom: 0;
         }
 
         .filter-card .uk-input {
@@ -217,6 +243,11 @@
             font-size: 1rem;
             background: #fafafa;
             color: #333;
+            height: auto;
+            min-height: 44px;
+            line-height: 1.5;
+            position: relative;
+            z-index: 100;
         }
 
         .filter-card .uk-select:focus {
@@ -224,6 +255,25 @@
             background: white;
             box-shadow: 0 0 0 4px rgba(217, 56, 30, 0.1);
             outline: none;
+        }
+
+        .filter-card .uk-select option {
+            padding: 12px 16px;
+            line-height: 1.6;
+            background: white;
+            color: #333;
+            font-size: 1rem;
+            min-height: 40px;
+        }
+
+        .filter-card .uk-select option:hover {
+            background: rgba(217, 56, 30, 0.1);
+            color: #d9381e;
+        }
+
+        .filter-card .uk-select option:checked {
+            background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%);
+            color: white;
         }
 
         /* ============ Button Styles ============ */
@@ -291,6 +341,51 @@
             color: white;
             background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%);
             box-shadow: 0 4px 16px rgba(217, 56, 30, 0.2);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+            border: 2px solid #6c757d;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-reset::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-reset:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-reset:hover {
+            transform: none;
+            box-shadow: 0 8px 24px rgba(108, 117, 125, 0.3);
+            background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+        }
+
+        .btn-reset:active {
+            transform: none;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.2);
         }
 
         /* ============ Data Table ============ */
@@ -444,6 +539,50 @@
             border-radius: 4px;
             letter-spacing: 0.5px;
             word-break: break-all;
+        }
+
+        /* ============ Date Badge ============ */
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, rgba(217, 56, 30, 0.1) 0%, rgba(217, 56, 30, 0.05) 100%);
+            color: #d9381e;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: 1px solid rgba(217, 56, 30, 0.2);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .date-badge:hover {
+            background: linear-gradient(135deg, rgba(217, 56, 30, 0.15) 0%, rgba(217, 56, 30, 0.1) 100%);
+            border-color: rgba(217, 56, 30, 0.4);
+            box-shadow: 0 2px 8px rgba(217, 56, 30, 0.1);
+        }
+
+        .date-badge-icon {
+            font-size: 1.1rem;
+        }
+
+        .date-badge-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .date-badge-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .date-badge-value {
+            font-size: 0.95rem;
+            font-weight: 700;
         }
 
         /* ============ Container ============ */
@@ -741,6 +880,235 @@
             text-decoration: underline;
             color: var(--illy-dark-red);
         }
+
+        /* ============ Custom Audio Player ============ */
+        .audio-player-container {
+            background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 24px rgba(217, 56, 30, 0.25);
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .audio-player {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .audio-button-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .audio-play-btn, .audio-pause-btn {
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .audio-play-btn:hover, .audio-pause-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            border-color: white;
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .audio-play-btn:active, .audio-pause-btn:active {
+            transform: scale(0.95);
+        }
+
+        .audio-skip-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .audio-skip-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.7);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .audio-skip-button:active {
+            transform: scale(0.95);
+        }
+
+        .audio-progress-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .audio-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .audio-progress-fill {
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+        }
+
+        .audio-progress-bar:hover .audio-progress-fill {
+            background: white;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+        }
+
+        .audio-time-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        .audio-volume-section {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            min-width: 200px;
+            justify-content: center;
+        }
+
+        .audio-volume-icon {
+            color: white;
+            font-size: 1.2rem;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .audio-volume-slider {
+            width: 120px;
+            height: 5px;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .audio-volume-slider:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .audio-volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .audio-volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .audio-volume-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .audio-volume-slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .audio-volume-value {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .audio-controls {
+                gap: 0.8rem;
+            }
+
+            .audio-play-btn, .audio-pause-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 1.2rem;
+            }
+
+            .audio-skip-button {
+                width: 40px;
+                height: 40px;
+                font-size: 0.85rem;
+            }
+
+            .audio-player-container {
+                padding: 1rem;
+            }
+
+            .audio-volume-section {
+                min-width: 150px;
+                gap: 0.5rem;
+            }
+
+            .audio-volume-slider {
+                width: 80px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -791,78 +1159,107 @@
         
         <!-- Filter Section -->
         <div class="filter-card uk-card uk-card-body">
-            <h3 class="filter-header">
-                <span uk-icon="icon: filter" style="color: #ffffff;"></span> Filtri Ricerca Avanzata
+            <h3 class="filter-header" onclick="toggleFilterPanel()" style="margin: 0; padding: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <span uk-icon="icon: filter" style="color: #ffffff;"></span> 
+                    <span>Filtri Ricerca Avanzata</span>
+                    <span id="filterBadge" style="background: rgba(255, 255, 255, 0.3); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; display: none; white-space: nowrap;"></span>
+                </div>
+                <span class="filter-toggle-icon" id="filterToggleIcon" uk-icon="icon: chevron-down; ratio: 1.2" style="color: #ffffff;"></span>
             </h3>
             
-            <form action="admin" method="get" class="uk-margin-top">
-                <div class="uk-grid-small uk-child-width-1-3@s uk-child-width-1-2@m uk-child-width-auto@l" uk-grid>
-                    <div>
-                        <label class="uk-form-label" for="start">
-                            <span uk-icon="icon: calendar; ratio: 0.9"></span> Dal (Data Inizio)
-                        </label>
-                        <div class="uk-form-controls">
-                            <input class="uk-input" id="start" type="date" name="startDate" value="${startDate}" required>
+            <div id="filterPanel" style="display: none; padding: 2rem; border-top: 2px solid #f0f0f0;">
+                <form action="admin" method="get" class="uk-margin-top" id="filterForm">
+                    <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
+                        <div>
+                            <label class="uk-form-label" for="start">
+                                <span uk-icon="icon: calendar; ratio: 0.9"></span> Dal
+                            </label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" id="start" type="date" name="startDate" value="${startDate}" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="uk-form-label" for="end">
+                                <span uk-icon="icon: calendar; ratio: 0.9"></span> Al
+                            </label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" id="end" type="date" name="endDate" value="${endDate}" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="uk-form-label" for="conversationId">
+                                <span uk-icon="icon: link; ratio: 0.9"></span> ID Int.
+                            </label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" id="conversationId" type="text" name="conversationId" placeholder="ID..." value="${param.conversationId}">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="uk-form-label" for="phone">
+                                <span uk-icon="icon: phone; ratio: 0.9"></span> Tel.
+                            </label>
+                            <div class="uk-form-controls">
+                                <input class="uk-input" id="phone" type="text" name="phone" placeholder="+39..." value="${param.phone}">
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <label class="uk-form-label" for="end">
-                            <span uk-icon="icon: calendar; ratio: 0.9"></span> Al (Data Fine)
-                        </label>
-                        <div class="uk-form-controls">
-                            <input class="uk-input" id="end" type="date" name="endDate" value="${endDate}" required>
+                    
+                    <div class="uk-margin-top uk-grid-small uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
+                        <div>
+                            <label class="uk-form-label" for="type">
+                                <span uk-icon="icon: tag; ratio: 0.9"></span> Categoria
+                            </label>
+                            <div class="uk-form-controls">
+                                <select class="uk-select" id="type" name="type">
+                                    <option value="">Tutti</option>
+                                    <option value="BtoB" ${param.type == 'BtoB' ? 'selected' : ''}>BtoB</option>
+                                    <option value="BtoC" ${param.type == 'BtoC' ? 'selected' : ''}>BtoC</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="uk-form-label" for="score">
+                                <span uk-icon="icon: star; ratio: 0.9"></span> Valutaz.
+                            </label>
+                            <div class="uk-form-controls">
+                                <select class="uk-select" id="score" name="score">
+                                    <option value="">Tutte</option>
+                                    <option value="0-5" ${param.score == '0-5' ? 'selected' : ''}>Bassa</option>
+                                    <option value="6-10" ${param.score == '6-10' ? 'selected' : ''}>Alta</option>
+                                    <option value="none" ${param.score == 'none' ? 'selected' : ''}>Senza</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="uk-form-label" for="audio">
+                                <span uk-icon="icon: microphone; ratio: 0.9"></span> Registro
+                            </label>
+                            <div class="uk-form-controls">
+                                <select class="uk-select" id="audio" name="audio">
+                                    <option value="">Tutti</option>
+                                    <option value="yes" ${param.audio == 'yes' ? 'selected' : ''}>Con</option>
+                                    <option value="no" ${param.audio == 'no' ? 'selected' : ''}>Senza</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="uk-form-label">&nbsp;</label>
+                            <div class="uk-form-controls uk-flex uk-gap" style="gap: 0.5rem;">
+                                <button type="submit" class="btn-filter" style="flex: 1;" title="Applica filtri">
+                                    <span uk-icon="icon: search; ratio: 0.9"></span>
+                                </button>
+                                <button type="button" class="btn-reset" onclick="resetFilters()" title="Azzera filtri">
+                                    <span uk-icon="icon: refresh; ratio: 0.9"></span>
+                                </button>
+                                <a href="admin?action=export&startDate=${startDate}&endDate=${endDate}&type=${param.type}&score=${param.score}&audio=${param.audio}" class="btn-export" uk-tooltip="title: Scarica CSV" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                                    <span uk-icon="icon: download; ratio: 0.9"></span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <label class="uk-form-label" for="type">
-                            <span uk-icon="icon: tag; ratio: 0.9"></span> Tipo Sondaggio
-                        </label>
-                        <div class="uk-form-controls">
-                            <select class="uk-select" id="type" name="type">
-                                <option value="">Tutti i Tipi</option>
-                                <option value="BtoB" ${param.type == 'BtoB' ? 'selected' : ''}>BtoB</option>
-                                <option value="BtoC" ${param.type == 'BtoC' ? 'selected' : ''}>BtoC</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="uk-form-label" for="score">
-                            <span uk-icon="icon: star; ratio: 0.9"></span> Valutazione
-                        </label>
-                        <div class="uk-form-controls">
-                            <select class="uk-select" id="score" name="score">
-                                <option value="">Tutte le Valutazioni</option>
-                                <option value="0-5" ${param.score == '0-5' ? 'selected' : ''}>Bassa (0-5)</option>
-                                <option value="6-10" ${param.score == '6-10' ? 'selected' : ''}>Alta (6-10)</option>
-                                <option value="none" ${param.score == 'none' ? 'selected' : ''}>Senza Voto</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="uk-form-label" for="audio">
-                            <span uk-icon="icon: microphone; ratio: 0.9"></span> Audio
-                        </label>
-                        <div class="uk-form-controls">
-                            <select class="uk-select" id="audio" name="audio">
-                                <option value="">Tutti</option>
-                                <option value="yes" ${param.audio == 'yes' ? 'selected' : ''}>Con Audio</option>
-                                <option value="no" ${param.audio == 'no' ? 'selected' : ''}>Senza Audio</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="uk-form-label">&nbsp;</label>
-                        <div class="uk-form-controls uk-flex uk-flex-between uk-gap">
-                            <button type="submit" class="btn-filter">
-                                <span uk-icon="icon: search; ratio: 0.9"></span> Filtra
-                            </button>
-                            <a href="admin?action=export&startDate=${startDate}&endDate=${endDate}&type=${param.type}&score=${param.score}&audio=${param.audio}" class="btn-export" uk-tooltip="title: Scarica i dati in formato CSV">
-                                <span uk-icon="icon: download; ratio: 0.9"></span> CSV
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
 
         <!-- Data Table Section -->
@@ -905,7 +1302,13 @@
                         <c:forEach var="item" items="${reportList}">
                             <tr>
                                 <td>
-                                    <strong>${item.date}</strong>
+                                    <div class="date-badge">
+                                        <span class="date-badge-icon" uk-icon="icon: calendar; ratio: 1"></span>
+                                        <span class="date-badge-text">
+                                            <span class="date-badge-label">Data</span>
+                                            <span class="date-badge-value" id="date-${item.conversationId}">${item.date}</span>
+                                        </span>
+                                    </div>
                                 </td>
                                 <td>
                                     <span class="conversation-id">${item.conversationId}</span>
@@ -953,22 +1356,74 @@
             <h2 class="uk-modal-title" style="color: var(--illy-red);">
                 <span uk-icon="icon: microphone; ratio: 1.2"></span> Riproduttore Audio
             </h2>
-            <div class="uk-margin-top uk-margin-bottom">
+            
+            <div class="uk-margin-top">
                 <p style="color: #666; margin-bottom: 1rem; font-weight: 600;">
                     <span uk-icon="icon: link; ratio: 0.9"></span> ID Interazione: <strong id="audio-modal-id" style="color: var(--illy-red);">-</strong>
                 </p>
-                <audio id="audio-player" controls style="width: 100%; border-radius: 8px; outline: none;">
-                    Il tuo browser non supporta la riproduzione audio.
-                </audio>
-                <div style="margin-top: 1rem; padding: 1rem; background: rgba(217, 56, 30, 0.05); border-radius: 8px; border-left: 4px solid var(--illy-red);">
-                    <p style="margin: 0; font-size: 0.9rem; color: #666;">
-                        <span uk-icon="icon: info; ratio: 0.8"></span> 
-                        Utilizza i controlli riproduzione per ascoltare la registrazione audio della conversazione.
-                    </p>
+            </div>
+
+            <div class="audio-player-container">
+                <div class="audio-player">
+                    <!-- Main Controls -->
+                    <div class="audio-controls">
+                        <div class="audio-button-group">
+                            <!-- Play Button -->
+                            <button class="audio-play-btn" id="playBtn" onclick="playAudio()" style="display: flex;" title="Riproduci">
+                                ▶
+                            </button>
+                            
+                            <!-- Pause Button -->
+                            <button class="audio-pause-btn" id="pauseBtn" onclick="pauseAudio()" style="display: none;" title="Pausa">
+                                ⏸
+                            </button>
+
+                            <!-- Skip Buttons -->
+                            <button class="audio-skip-button" id="rewindBtn" onclick="rewindAudio()" title="Indietro 5 secondi">
+                                -5s
+                            </button>
+                            <button class="audio-skip-button" id="forwardBtn" onclick="forwardAudio()" title="Avanti 5 secondi">
+                                +5s
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar Section -->
+                    <div class="audio-progress-section">
+                        <div class="audio-progress-bar" id="audioProgressBar" onclick="seekAudio(event)">
+                            <div class="audio-progress-fill" id="audioProgressFill"></div>
+                        </div>
+                        <div class="audio-time-display">
+                            <span id="audioCurrentTime">0:00</span>
+                            <span id="audioDuration">0:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Volume Control Section -->
+                    <div class="audio-volume-section">
+                        <div class="audio-volume-icon">
+                            <span uk-icon="icon: volume-high; ratio: 1"></span>
+                        </div>
+                        <input type="range" class="audio-volume-slider" id="volumeSlider" min="0" max="100" value="100" onchange="setVolume(this.value)" title="Regola il volume">
+                        <div class="audio-volume-value" id="volumeValue">100%</div>
+                    </div>
                 </div>
             </div>
+
+            <!-- Hidden audio element -->
+            <audio id="audio-player" style="display: none;">
+                Il tuo browser non supporta la riproduzione audio.
+            </audio>
+
+            <div style="margin-top: 1rem; padding: 1rem; background: rgba(217, 56, 30, 0.05); border-radius: 8px; border-left: 4px solid var(--illy-red);">
+                <p style="margin: 0; font-size: 0.9rem; color: #666;">
+                    <span uk-icon="icon: info; ratio: 0.8"></span> 
+                    Riproduci e controlla la registrazione con i pulsanti. Usa +5s e -5s per saltare velocemente.
+                </p>
+            </div>
+
             <div class="uk-text-right uk-margin-top">
-                <button class="uk-button uk-button-default uk-modal-close">Chiudi</button>
+                <button class="uk-button uk-button-default uk-modal-close" onclick="stopAudio()">Chiudi</button>
             </div>
         </div>
     </div>
@@ -997,6 +1452,182 @@
     </footer>
 
     <script>
+        // ============ Filter Panel Toggle ============
+        function toggleFilterPanel() {
+            const filterPanel = document.getElementById('filterPanel');
+            const toggleIcon = document.getElementById('filterToggleIcon');
+            
+            if (filterPanel.style.display === 'none') {
+                filterPanel.style.display = 'block';
+                toggleIcon.classList.remove('closed');
+            } else {
+                filterPanel.style.display = 'none';
+                toggleIcon.classList.add('closed');
+            }
+        }
+
+        // Reset all filters
+        function resetFilters() {
+            // Tüm input ve select'leri sıfırla
+            document.getElementById('conversationId').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('type').value = '';
+            document.getElementById('score').value = '';
+            document.getElementById('audio').value = '';
+            
+            // Badge'i güncelle
+            updateFilterBadge();
+            
+            // Ana sayfa URL'sine yönlendir (tüm filtresiz)
+            window.location.href = 'admin';
+        }
+
+        // Format date to readable format
+        function formatDateBadge() {
+            const dateElements = document.querySelectorAll('[id^="date-"]');
+            dateElements.forEach(el => {
+                const dateStr = el.textContent.trim();
+                if (dateStr && dateStr !== '-') {
+                    try {
+                        // Parse ISO format (YYYY-MM-DD) or timestamp
+                        const date = new Date(dateStr);
+                        if (!isNaN(date.getTime())) {
+                            const options = { 
+                                weekday: 'short', 
+                                year: 'numeric', 
+                                month: 'short', 
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            };
+                            const formatted = new Intl.DateTimeFormat('it-IT', options).format(date);
+                            el.textContent = formatted;
+                        }
+                    } catch(e) {
+                        console.log('Date format error:', e);
+                    }
+                }
+            });
+        }
+
+        // ...existing code...
+        function updateFilterBadge() {
+            const badge = document.getElementById('filterBadge');
+            const conversationId = document.getElementById('conversationId').value;
+            const phone = document.getElementById('phone').value;
+            const type = document.getElementById('type').value;
+            const score = document.getElementById('score').value;
+            const audio = document.getElementById('audio').value;
+            
+            const activeFilters = [];
+            if (conversationId) activeFilters.push(conversationId);
+            if (phone) activeFilters.push(phone);
+            if (type) activeFilters.push(type);
+            if (score) activeFilters.push(score === '0-5' ? 'Bassa' : score === '6-10' ? 'Alta' : 'Senza voto');
+            if (audio) activeFilters.push(audio === 'yes' ? 'Con Audio' : 'Senza Audio');
+            
+            if (activeFilters.length > 0) {
+                badge.textContent = `${activeFilters.length} filtro${activeFilters.length > 1 ? 'i' : ''} attivo`;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // ============ Audio Player Functions ============
+        const audioPlayer = document.getElementById('audio-player');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const audioProgressBar = document.getElementById('audioProgressBar');
+        const audioProgressFill = document.getElementById('audioProgressFill');
+        const audioCurrentTime = document.getElementById('audioCurrentTime');
+        const audioDuration = document.getElementById('audioDuration');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeValue = document.getElementById('volumeValue');
+
+        function formatTime(seconds) {
+            if (isNaN(seconds) || seconds === Infinity) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function updateProgress() {
+            if (audioPlayer.duration) {
+                const percent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                audioProgressFill.style.width = percent + '%';
+                audioCurrentTime.textContent = formatTime(audioPlayer.currentTime);
+                audioDuration.textContent = formatTime(audioPlayer.duration);
+            }
+        }
+
+        function playAudio() {
+            if (audioPlayer.src) {
+                audioPlayer.play();
+                playBtn.style.display = 'none';
+                pauseBtn.style.display = 'flex';
+            }
+        }
+
+        function pauseAudio() {
+            audioPlayer.pause();
+            pauseBtn.style.display = 'none';
+            playBtn.style.display = 'flex';
+        }
+
+        function stopAudio() {
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+            pauseBtn.style.display = 'none';
+            playBtn.style.display = 'flex';
+            audioProgressFill.style.width = '0%';
+            audioCurrentTime.textContent = '0:00';
+        }
+
+        function seekAudio(event) {
+            if (audioPlayer.duration) {
+                const rect = audioProgressBar.getBoundingClientRect();
+                const percent = (event.clientX - rect.left) / rect.width;
+                audioPlayer.currentTime = Math.max(0, Math.min(percent * audioPlayer.duration, audioPlayer.duration));
+            }
+        }
+
+        function rewindAudio() {
+            audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 5);
+        }
+
+        function forwardAudio() {
+            audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 5);
+        }
+
+        function setVolume(value) {
+            audioPlayer.volume = value / 100;
+            volumeValue.textContent = value + '%';
+        }
+
+        // Update progress when audio plays
+        audioPlayer.addEventListener('timeupdate', updateProgress);
+
+        // Handle audio end
+        audioPlayer.addEventListener('ended', function() {
+            pauseBtn.style.display = 'none';
+            playBtn.style.display = 'flex';
+            audioPlayer.currentTime = 0;
+            audioProgressFill.style.width = '0%';
+        });
+
+        // Handle audio metadata loaded
+        audioPlayer.addEventListener('loadedmetadata', function() {
+            audioDuration.textContent = formatTime(audioPlayer.duration);
+            audioCurrentTime.textContent = '0:00';
+        });
+
+        // Handle audio load error
+        audioPlayer.addEventListener('error', function() {
+            console.log('Audio file not found or unable to load');
+        });
+
+        // ============ Original Functions ============
         // Calculate statistics
         function calculateStats() {
             const lowScores = document.querySelectorAll('.score-low').length;
@@ -1011,16 +1642,28 @@
         // Open audio modal
         function openAudioModal(conversationId) {
             document.getElementById('audio-modal-id').textContent = conversationId;
-            // In a real scenario, you would fetch the audio file here
             document.getElementById('audio-player').src = 'api/audio/' + conversationId;
+            // Reset player state
+            stopAudio();
+            // Initialize duration display
+            audioCurrentTime.textContent = '0:00';
+            audioDuration.textContent = '0:00';
             UIkit.modal(document.getElementById('audio-modal')).show();
         }
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
             calculateStats();
+            updateFilterBadge();
+            formatDateBadge();
             
-            // Add smooth scrolling
+            // Update filter badge when inputs change
+            document.querySelectorAll('#conversationId, #phone, #type, #score, #audio').forEach(input => {
+                input.addEventListener('change', updateFilterBadge);
+                input.addEventListener('input', updateFilterBadge);
+            });
+            
+            // ...existing code...
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
