@@ -31,10 +31,6 @@ public class ConfigServlet extends HttpServlet {
         System.out.println("ConfigServlet starting...");
 
         try (InputStream input = new FileInputStream(CONFIG_PATH)) {
-            if (input == null) {
-                System.err.println("ERROR: Configuration file not found -> " + CONFIG_PATH);
-                return;
-            }
             properties.load(input);
             
             // 1. Get Log4j XML file path from properties
@@ -63,8 +59,10 @@ public class ConfigServlet extends HttpServlet {
             if(logger != null) logger.info("All settings loaded. Config Path: " + CONFIG_PATH);
 
         } catch (IOException e) {
-            e.printStackTrace();
-            if(logger != null) logger.error("Error while loading configuration", e);
+            System.err.println("ERROR: Failed to load configuration file: " + e.getMessage());
+            if(logger != null) {
+                logger.error("Error while loading configuration", e);
+            }
         }
     }
 

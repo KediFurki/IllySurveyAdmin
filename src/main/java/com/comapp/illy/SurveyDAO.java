@@ -34,11 +34,6 @@ public class SurveyDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(QUERY)) {
             
-            if (conn == null) {
-                logger.error("Failed to establish database connection");
-                return list;
-            }
-            
             ps.setString(1, startParam);
             ps.setString(2, endParam);
             
