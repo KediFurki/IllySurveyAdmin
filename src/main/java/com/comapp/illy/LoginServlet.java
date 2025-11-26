@@ -11,11 +11,13 @@ import jakarta.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String loginUrl = "https://login." + GenesysConfig.REGION_DOMAIN + "/oauth/authorize" +
-                "?client_id=" + GenesysConfig.CLIENT_ID +
+        // GenesysConfig.CLIENT_ID yerine GenesysConfig.getClientId() kullanıyoruz
+        String loginUrl = "https://login." + GenesysConfig.getRegion() + "/oauth/authorize" +
+                "?client_id=" + GenesysConfig.getClientId() +
                 "&response_type=code" +
-                "&redirect_uri=" + GenesysConfig.REDIRECT_URI;
+                "&redirect_uri=" + GenesysConfig.getRedirectUri();
         
         response.sendRedirect(loginUrl);
     }
