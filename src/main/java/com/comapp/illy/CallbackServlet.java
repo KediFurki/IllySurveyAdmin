@@ -35,14 +35,14 @@ public class CallbackServlet extends HttpServlet {
         if (code == null || code.trim().isEmpty()) {
             logger.warn("Authorization code not received from Genesys");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("Hata: Genesys'ten yetki kodu gelmedi.");
+            response.getWriter().write("Error: Authorization code not received from Genesys.");
             return;
         }
 
         try {
             String tokenUrl = "https://login." + GenesysConfig.getRegion() + "/oauth/token";
 
-            // GÜNCELLEME: Getter metotlarını kullanıyoruz
+            // Use getter methods from GenesysConfig
             String clientId = GenesysConfig.getClientId();
             String clientSecret = GenesysConfig.getClientSecret();
             String redirectUri = GenesysConfig.getRedirectUri();
@@ -51,7 +51,7 @@ public class CallbackServlet extends HttpServlet {
             if (clientId == null || clientId.isEmpty() || clientSecret == null || clientSecret.isEmpty()) {
                 logger.error("Genesys credentials are not configured");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().write("Sistem yapılandırma hatası. Lütfen yöneticinize başvurun.");
+                response.getWriter().write("System configuration error. Please contact your administrator.");
                 return;
             }
 
@@ -89,18 +89,18 @@ public class CallbackServlet extends HttpServlet {
             } else {
                 logger.error("OAuth token request failed with status: {}", authResponse.statusCode());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Login Başarısız! HTTP Kodu: " + authResponse.statusCode());
+                response.getWriter().write("Login Failed! HTTP Status: " + authResponse.statusCode());
             }
 
         } catch (InterruptedException e) {
             logger.error("OAuth request interrupted", e);
             Thread.currentThread().interrupt();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("İşlem kesildi.");
+            response.getWriter().write("Operation was interrupted.");
         } catch (Exception e) {
             logger.error("Unexpected error during OAuth callback", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("Sistem Hatası. Lütfen yöneticinize başvurun.");
+            response.getWriter().write("System Error. Please contact your administrator.");
         }
     }
 }
