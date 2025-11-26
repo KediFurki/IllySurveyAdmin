@@ -41,10 +41,10 @@ public class CallbackServlet extends HttpServlet {
         }
 
         try {
-            // 1. Token URL
+            // 1. Token endpoint URL
             String tokenUrl = "https://login." + GenesysConfig.REGION_DOMAIN + "/oauth/token";
 
-            // 2. Prepare Auth Header (Basic Auth)
+            // 2. Prepare Basic Auth header
             String auth = GenesysConfig.CLIENT_ID + ":" + GenesysConfig.CLIENT_SECRET;
             
             if ((GenesysConfig.CLIENT_ID == null || GenesysConfig.CLIENT_ID.isEmpty()) || 
@@ -57,7 +57,7 @@ public class CallbackServlet extends HttpServlet {
             
             String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
 
-            // 3. Prepare Request Body (x-www-form-urlencoded format)
+            // 3. Prepare request body in x-www-form-urlencoded format
             Map<String, String> params = Map.of(
                 "grant_type", "authorization_code",
                 "code", code,
@@ -69,7 +69,7 @@ public class CallbackServlet extends HttpServlet {
                 .map(e -> e.getKey() + "=" + URLEncoder.encode(e.getValue(), StandardCharsets.UTF_8))
                 .collect(Collectors.joining("&"));
 
-            // 4. Build Request (Java 21 Style)
+            // 4. Build HTTP request using Java 21 style
             HttpRequest authRequest = HttpRequest.newBuilder()
                 .uri(URI.create(tokenUrl))
                 .header("Authorization", "Basic " + encodedAuth)
@@ -79,21 +79,21 @@ public class CallbackServlet extends HttpServlet {
 
             logger.info("Sending OAuth token request to Genesys");
 
-            // 5. Send Request and Get Response
+            // 5. Send request and receive response
             HttpResponse<String> authResponse = httpClient.send(authRequest, HttpResponse.BodyHandlers.ofString());
 
             if (authResponse.statusCode() == 200) {
-                // 6. Parse JSON
+                // 6. Parse JSON response
                 JSONObject json = new JSONObject(authResponse.body());
                 String accessToken = json.getString("access_token");
 
-                // 7. Start Session
+                // 7. Create user session
                 HttpSession session = request.getSession();
                 session.setAttribute("genesysUser", accessToken);
                 
                 logger.info("User successfully authenticated and session created");
 
-                // 8. Redirect to Admin Panel
+                // 8. Redirect to admin panel
                 response.sendRedirect(request.getContextPath() + "/admin");
             } else {
                 logger.error("OAuth token request failed with status: {}", authResponse.statusCode());

@@ -23,14 +23,13 @@ public class AuthFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         HttpSession session = request.getSession(false);
 
-        // Check if user is already logged in
+        // Check if user is authenticated
         boolean isLoggedIn = (session != null && session.getAttribute("genesysUser") != null);
         
-        // If logged in, continue the request chain; otherwise redirect to login
+        // Continue chain if authenticated, otherwise redirect to login page
         if (isLoggedIn) {
             chain.doFilter(req, res);
         } else {
-            // Redirect to login page
             response.sendRedirect(request.getContextPath() + "/login.jsp");
         }
     }

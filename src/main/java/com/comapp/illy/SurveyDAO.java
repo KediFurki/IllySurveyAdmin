@@ -27,7 +27,7 @@ public class SurveyDAO {
     public List<SurveyBean> getSurveys(String startDate, String endDate) {
         List<SurveyBean> list = new ArrayList<>();
         
-        // Format dates for DB (Append time)
+        // Format dates for database query (append time component)
         String startParam = startDate + "T00:00:00.000Z";
         String endParam = endDate + "T23:59:59.999Z";
 
