@@ -26,15 +26,15 @@ public class SessionListener implements HttpSessionListener {
         String sessionId = se.getSession().getId();
         int maxInactiveInterval = 30 * 60; // 30 minutes
         
-        logger.info("╔═══════════════════════════════════════════════════════════╗");
-        logger.info("║  NEW SESSION CREATED                                      ║");
-        logger.info("╚═══════════════════════════════════════════════════════════╝");
+        logger.info("+===========================================================+");
+        logger.info("|  NEW SESSION CREATED                                      |");
+        logger.info("+===========================================================+");
         logger.info("Session Details:");
-        logger.info("  • Session ID: {}", sessionId);
-        logger.info("  • Creation Time: {}", new java.util.Date(se.getSession().getCreationTime()));
-        logger.info("  • Max Inactive Interval: {} minutes", maxInactiveInterval / 60);
-        logger.info("  • Active Sessions: {}", activeSessions);
-        logger.info("  • Total Sessions Since Startup: {}", totalSessionsCreated);
+        logger.info("  - Session ID: {}", sessionId);
+        logger.info("  - Creation Time: {}", new java.util.Date(se.getSession().getCreationTime()));
+        logger.info("  - Max Inactive Interval: {} minutes", maxInactiveInterval / 60);
+        logger.info("  - Active Sessions: {}", activeSessions);
+        logger.info("  - Total Sessions Since Startup: {}", totalSessionsCreated);
         
         // Set default session timeout to 30 minutes
         se.getSession().setMaxInactiveInterval(maxInactiveInterval);
@@ -76,25 +76,25 @@ public class SessionListener implements HttpSessionListener {
             logger.debug("Could not retrieve session attributes during destruction", e);
         }
         
-        logger.info("╔═══════════════════════════════════════════════════════════╗");
-        logger.info("║  SESSION DESTROYED                                        ║");
-        logger.info("╚═══════════════════════════════════════════════════════════╝");
+        logger.info("+===========================================================+");
+        logger.info("|  SESSION DESTROYED                                        |");
+        logger.info("+===========================================================+");
         logger.info("Session Details:");
-        logger.info("  • User: {}", username);
+        logger.info("  - User: {}", username);
         if (!userEmail.isEmpty()) {
-            logger.info("  • Email: {}", userEmail);
+            logger.info("  - Email: {}", userEmail);
         }
-        logger.info("  • Session ID: {}", sessionId);
-        logger.info("  • Session Duration: {} minutes ({} seconds)", sessionDuration / 60, sessionDuration);
-        logger.info("  • Remaining Active Sessions: {}", activeSessions);
-        logger.info("  • Total Sessions Since Startup: {}", totalSessionsCreated);
+        logger.info("  - Session ID: {}", sessionId);
+        logger.info("  - Session Duration: {} minutes ({} seconds)", sessionDuration / 60, sessionDuration);
+        logger.info("  - Remaining Active Sessions: {}", activeSessions);
+        logger.info("  - Total Sessions Since Startup: {}", totalSessionsCreated);
         
         // Calculate application uptime
         long uptime = (System.currentTimeMillis() - applicationStartTime) / 1000;
-        logger.info("  • Application Uptime: {} hours {} minutes", uptime / 3600, (uptime % 3600) / 60);
+        logger.info("  - Application Uptime: {} hours {} minutes", uptime / 3600, (uptime % 3600) / 60);
         
         if (activeSessions == 0) {
-            logger.info("⚠ No active sessions remaining - All users logged out");
+            logger.info("[!] No active sessions remaining - All users logged out");
         }
     }
 

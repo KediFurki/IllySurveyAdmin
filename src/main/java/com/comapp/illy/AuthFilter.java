@@ -21,16 +21,16 @@ public class AuthFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        logger.info("═══════════════════════════════════════════════════════════");
-        logger.info("ILLY SURVEY ADMIN - Authentication Filter Initialization");
-        logger.info("═══════════════════════════════════════════════════════════");
+        logger.info("===============================================================");
+        logger.info("   ILLY SURVEY ADMIN - Authentication Filter Initialization");
+        logger.info("===============================================================");
         logger.info("Protected Endpoints:");
         logger.info("  - /admin (Main survey dashboard)");
         logger.info("  - /index.jsp (Survey results page)");
         logger.info("  - / (Root application)");
         logger.info("Authentication Method: Genesys Cloud OAuth 2.0");
         logger.info("Session Timeout: 30 minutes");
-        logger.info("═══════════════════════════════════════════════════════════");
+        logger.info("===============================================================");
     }
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) 
@@ -45,7 +45,7 @@ public class AuthFilter implements Filter {
         String userAgent = request.getHeader("User-Agent");
         String method = request.getMethod();
         
-        logger.debug("━━━ Authentication Check ━━━");
+        logger.debug("--- Authentication Check ---");
         logger.debug("Request: {} {} from IP: {}", method, requestURI, remoteAddr);
         logger.debug("User-Agent: {}", userAgent != null ? userAgent.substring(0, Math.min(50, userAgent.length())) + "..." : "Unknown");
 
@@ -67,7 +67,7 @@ public class AuthFilter implements Filter {
                               session.getAttribute("userEmail").toString() : "";
             String sessionId = session.getId();
             
-            logger.info("✓ ACCESS GRANTED - User: '{}' ({}), Session: {}, Accessing: {}, IP: {}", 
+            logger.info("[+] ACCESS GRANTED - User: '{}' ({}), Session: {}, Accessing: {}, IP: {}", 
                        userName, userEmail, sessionId, requestURI, remoteAddr);
             
             // Log session age for monitoring
@@ -80,9 +80,9 @@ public class AuthFilter implements Filter {
         } else {
             // Log detailed reason for access denial
             if (!hasSession) {
-                logger.warn("✗ ACCESS DENIED - No active session - Endpoint: {}, IP: {}", requestURI, remoteAddr);
+                logger.warn("[-] ACCESS DENIED - No active session - Endpoint: {}, IP: {}", requestURI, remoteAddr);
             } else if (!hasGenesysToken) {
-                logger.warn("✗ ACCESS DENIED - Session exists but no Genesys token found - Session: {}, Endpoint: {}, IP: {}", 
+                logger.warn("[-] ACCESS DENIED - Session exists but no Genesys token found - Session: {}, Endpoint: {}, IP: {}", 
                            session.getId(), requestURI, remoteAddr);
             }
             
@@ -93,8 +93,8 @@ public class AuthFilter implements Filter {
     
     @Override
     public void destroy() {
-        logger.info("═══════════════════════════════════════════════════════════");
-        logger.info("ILLY SURVEY ADMIN - Authentication Filter Shutdown");
-        logger.info("═══════════════════════════════════════════════════════════");
+        logger.info("===============================================================");
+        logger.info("   ILLY SURVEY ADMIN - Authentication Filter Shutdown");
+        logger.info("===============================================================");
     }
 }
