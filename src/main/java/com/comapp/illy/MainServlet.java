@@ -25,10 +25,22 @@ public class MainServlet extends HttpServlet {
         String sessionId = request.getSession(false) != null ? request.getSession(false).getId() : "no-session";
         String userName = request.getSession(false) != null && request.getSession(false).getAttribute("userName") != null ? 
                          request.getSession(false).getAttribute("userName").toString() : "Unknown";
+        String userEmail = request.getSession(false) != null && request.getSession(false).getAttribute("userEmail") != null ? 
+                          request.getSession(false).getAttribute("userEmail").toString() : "";
         
-        logger.info("Admin page request - User: {}, SessionID: {}, IP: {}", userName, sessionId, remoteAddr);
+        logger.info("╔═══════════════════════════════════════════════════════════╗");
+        logger.info("║  ADMIN DASHBOARD REQUEST                                  ║");
+        logger.info("╚═══════════════════════════════════════════════════════════╝");
+        logger.info("Request Details:");
+        logger.info("  • User: {} ({})", userName, userEmail);
+        logger.info("  • Session ID: {}", sessionId);
+        logger.info("  • IP Address: {}", remoteAddr);
+        logger.info("  • Request Method: {}", request.getMethod());
+        logger.info("  • Request URI: {}", request.getRequestURI());
         
         try {
+            long requestStartTime = System.currentTimeMillis();
+            
             String action = request.getParameter("action");
             String startDate = request.getParameter("startDate");
             String endDate = request.getParameter("endDate");
@@ -36,8 +48,19 @@ public class MainServlet extends HttpServlet {
             String scoreFilter = request.getParameter("score");
             String audioFilter = request.getParameter("audio");
 
-            logger.debug("Request parameters - Action: {}, Dates: {} to {}, Filters - Type: {}, Score: {}, Audio: {}", 
-                        action, startDate, endDate, typeFilter, scoreFilter, audioFilter);
+            logger.info("━━━ Request Parameters ━━━");
+            logger.info("  • Action: {}", action != null ? action : "view (default)");
+            logger.info("  • Start Date: {}", startDate != null ? startDate : "not provided (will use default)");
+            logger.info("  • End Date: {}", endDate != null ? endDate : "not provided (will use default)");
+            
+            if (typeFilter != null || scoreFilter != null || audioFilter != null) {
+                logger.info("  • Filters Active:");
+                if (typeFilter != null) logger.info("    - Type: {}", typeFilter);
+                if (scoreFilter != null) logger.info("    - Score: {}", scoreFilter);
+                if (audioFilter != null) logger.info("    - Audio: {}", audioFilter);
+            } else {
+                logger.info("  • Filters: None applied");
+            }
 
             // Validate and set default dates
             String originalStartDate = startDate;
@@ -45,56 +68,97 @@ public class MainServlet extends HttpServlet {
             
             if (startDate == null || startDate.trim().isEmpty()) {
                 startDate = LocalDate.now().minusDays(30).toString();
-                logger.debug("Start date not provided, using default: {}", startDate);
+                logger.info("  • Start date auto-set to: {} (last 30 days)", startDate);
             } else {
-                startDate = validateDateFormat(startDate);
-                logger.debug("Start date validated: {} -> {}", originalStartDate, startDate);
+                String validated = validateDateFormat(startDate);
+                if (!validated.equals(startDate)) {
+                    logger.warn("  • Start date corrected: {} → {}", startDate, validated);
+                }
+                startDate = validated;
             }
             
             if (endDate == null || endDate.trim().isEmpty()) {
                 endDate = LocalDate.now().toString();
-                logger.debug("End date not provided, using default: {}", endDate);
+                logger.info("  • End date auto-set to: {} (today)", endDate);
             } else {
-                endDate = validateDateFormat(endDate);
-                logger.debug("End date validated: {} -> {}", originalEndDate, endDate);
+                String validated = validateDateFormat(endDate);
+                if (!validated.equals(endDate)) {
+                    logger.warn("  • End date corrected: {} → {}", endDate, validated);
+                }
+                endDate = validated;
             }
 
-            logger.info("Fetching surveys - User: {}, Action: {}, Date range: {} to {}, Filters applied: {}", 
-                       userName, action != null ? action : "view", startDate, endDate, 
-                       (typeFilter != null || scoreFilter != null || audioFilter != null));
+            logger.info("━━━ Querying Database for Survey Data ━━━");
+            logger.info("  • Date Range: {} to {} ({} days)", 
+                       startDate, endDate, 
+                       java.time.temporal.ChronoUnit.DAYS.between(
+                           LocalDate.parse(startDate), LocalDate.parse(endDate)));
+            logger.info("  • User: {}", userName);
 
             long dbStartTime = System.currentTimeMillis();
             List<SurveyBean> data = dao.getSurveys(startDate, endDate);
             long dbEndTime = System.currentTimeMillis();
+            long dbQueryTime = dbEndTime - dbStartTime;
             
             int totalRecords = data.size();
-            logger.info("Database query completed - Records retrieved: {}, Time: {}ms", 
-                       totalRecords, (dbEndTime - dbStartTime));
+            logger.info("✓ Database query completed successfully");
+            logger.info("  • Records Retrieved: {}", totalRecords);
+            logger.info("  • Query Time: {}ms", dbQueryTime);
+            
+            if (dbQueryTime > 3000) {
+                logger.warn("  ⚠ SLOW QUERY DETECTED - Consider optimizing or adding indexes");
+            }
+            
+            if (totalRecords == 0) {
+                logger.warn("  ⚠ NO DATA FOUND for date range {} to {}", startDate, endDate);
+            }
             
             // Apply filters
+            logger.info("━━━ Applying User Filters ━━━");
             int preFilterCount = data.size();
             data = applyFilters(data, typeFilter, scoreFilter, audioFilter);
             int postFilterCount = data.size();
             
             if (preFilterCount != postFilterCount) {
-                logger.info("Filters applied - Before: {}, After: {}, Filtered out: {}", 
-                           preFilterCount, postFilterCount, (preFilterCount - postFilterCount));
+                int filteredOut = preFilterCount - postFilterCount;
+                double filterPercentage = (filteredOut * 100.0) / preFilterCount;
+                
+                logger.info("  • Records Before Filters: {}", preFilterCount);
+                logger.info("  • Records After Filters: {}", postFilterCount);
+                logger.info("  • Filtered Out: {} ({:.1f}%)", filteredOut, filterPercentage);
+                
+                if (postFilterCount == 0) {
+                    logger.warn("  ⚠ ALL RECORDS FILTERED OUT - User will see empty result");
+                }
+            } else {
+                logger.info("  • No records filtered (filters not active or match all records)");
             }
 
             // CSV EXPORT
             if ("export".equals(action)) {
-                logger.info("CSV export initiated - User: {}, Records: {}", userName, data.size());
+                long exportStartTime = System.currentTimeMillis();
+                String filename = "Illy_Survey_" + System.currentTimeMillis() + ".csv";
+                
+                logger.info("╔═══════════════════════════════════════════════════════════╗");
+                logger.info("║  CSV EXPORT INITIATED                                     ║");
+                logger.info("╚═══════════════════════════════════════════════════════════╝");
+                logger.info("Export Details:");
+                logger.info("  • User: {} ({})", userName, userEmail);
+                logger.info("  • Filename: {}", filename);
+                logger.info("  • Total Records: {}", data.size());
+                logger.info("  • Date Range: {} to {}", startDate, endDate);
+                logger.info("  • Filters Applied: {}", (typeFilter != null || scoreFilter != null || audioFilter != null));
                 
                 response.setContentType("text/csv; charset=UTF-8");
-                String filename = "Illy_Survey_" + System.currentTimeMillis() + ".csv";
                 response.setHeader("Content-Disposition", "attachment; filename=" + filename);
-                
-                logger.debug("CSV filename: {}", filename);
                 
                 PrintWriter out = response.getWriter();
                 out.println("Data,ID Interazione,Telefono,Tipo,Voto,Audio");
                 
                 int exportedRecords = 0;
+                int recordsWithAudio = 0;
+                int recordsWithScore = 0;
+                
                 for (SurveyBean s : data) {
                     String date = s.getDate() != null ? s.getDate() : "";
                     String convId = s.getConversationId() != null ? s.getConversationId() : "";
@@ -105,16 +169,31 @@ public class MainServlet extends HttpServlet {
                     
                     out.printf("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"%n", date, convId, phone, type, score, audio);
                     exportedRecords++;
+                    
+                    if ("true".equalsIgnoreCase(audio)) recordsWithAudio++;
+                    if (score != null && !score.equals("N/A")) recordsWithScore++;
                 }
                 out.flush();
                 
-                logger.info("CSV export completed successfully - User: {}, File: {}, Records: {}", 
-                           userName, filename, exportedRecords);
+                long exportTime = System.currentTimeMillis() - exportStartTime;
+                long totalRequestTime = System.currentTimeMillis() - requestStartTime;
+                
+                logger.info("✓ CSV Export Completed Successfully");
+                logger.info("Export Statistics:");
+                logger.info("  • Total Records Exported: {}", exportedRecords);
+                logger.info("  • Records with Audio: {}", recordsWithAudio);
+                logger.info("  • Records with Score: {}", recordsWithScore);
+                logger.info("  • Export Time: {}ms", exportTime);
+                logger.info("  • Total Request Time: {}ms", totalRequestTime);
+                logger.info("  • File Size (approx): {} KB", (exportedRecords * 100) / 1024);
+                logger.info("═══════════════════════════════════════════════════════════");
                 return;
             }
 
             // HTML VIEW
-            logger.debug("Preparing HTML view with {} records", data.size());
+            logger.info("━━━ Rendering HTML Dashboard View ━━━");
+            logger.info("  • View Type: Survey Dashboard");
+            logger.info("  • Records to Display: {}", data.size());
             
             request.setAttribute("reportList", data);
             request.setAttribute("startDate", startDate);
@@ -123,13 +202,36 @@ public class MainServlet extends HttpServlet {
             request.setAttribute("scoreFilter", scoreFilter != null ? scoreFilter : "");
             request.setAttribute("audioFilter", audioFilter != null ? audioFilter : "");
             
-            logger.info("Admin page rendering - User: {}, Records displayed: {}", userName, data.size());
+            long totalRequestTime = System.currentTimeMillis() - requestStartTime;
             
+            logger.info("✓ Request Processing Completed");
+            logger.info("Performance Metrics:");
+            logger.info("  • Database Query: {}ms", dbQueryTime);
+            logger.info("  • Total Processing: {}ms", totalRequestTime);
+            logger.info("  • User: {}", userName);
+            logger.info("  • Records Displayed: {}", data.size());
+            
+            if (totalRequestTime > 5000) {
+                logger.warn("  ⚠ SLOW REQUEST - Total time: {}ms exceeds 5 seconds", totalRequestTime);
+            }
+            
+            logger.info("→ Forwarding to index.jsp for rendering");
             request.getRequestDispatcher("index.jsp").forward(request, response);
+            logger.debug("Page rendered successfully");
             
         } catch (Exception e) {
-            logger.error("Error processing admin request - User: {}, SessionID: {}, IP: {}", 
-                        userName, sessionId, remoteAddr, e);
+            logger.error("╔═══════════════════════════════════════════════════════════╗");
+            logger.error("║  ERROR PROCESSING ADMIN REQUEST                           ║");
+            logger.error("╚═══════════════════════════════════════════════════════════╝");
+            logger.error("Error Details:");
+            logger.error("  • User: {}", userName);
+            logger.error("  • Session ID: {}", sessionId);
+            logger.error("  • IP Address: {}", remoteAddr);
+            logger.error("  • Error Type: {}", e.getClass().getName());
+            logger.error("  • Error Message: {}", e.getMessage());
+            logger.error("  • Cause: {}", e.getCause() != null ? e.getCause().getMessage() : "None");
+            logger.error("Full Stack Trace:", e);
+            
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 
                              "An error occurred while processing your request");
         }
