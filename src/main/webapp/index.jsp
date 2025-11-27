@@ -3,6 +3,11 @@
 <%@ taglib uri="jakarta.tags.functions" prefix="fn" %>
 
 <% 
+    // Prevent caching to avoid back button issues after logout
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+    
     if (request.getAttribute("reportList") == null) {
         response.sendRedirect("admin");
         return;
@@ -104,6 +109,65 @@
 
         .admin-badge:active {
             transform: translateY(0);
+        }
+
+        .user-info-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .user-name {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .user-email {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .user-loading {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        /* ============ Logout Button ============ */
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white !important;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 2px solid #6c757d;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 1rem;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+            border-color: #495057;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
+            color: white !important;
+        }
+
+        .logout-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         /* ============ Header Stats ============ */
@@ -797,8 +861,21 @@
                 display: none;
             }
 
-            .admin-badge span {
-                display: none;
+            .admin-badge .user-info-container {
+                display: none !important;
+            }
+
+            .admin-badge {
+                padding: 0.5rem;
+            }
+
+            .logout-btn {
+                padding: 0.5rem;
+                margin-left: 0.5rem;
+            }
+
+            .logout-btn span.uk-hidden-small {
+                display: none !important;
             }
 
             .uk-table {
@@ -1121,8 +1198,18 @@
             </a>
         </div>
         <div class="uk-navbar-right">
-            <div class="admin-badge">
-                <span uk-icon="icon: user; ratio: 1.1" style="color: #ffffff;"></span> &nbsp; <span class="uk-hidden-small" style="color: #ffffff;">Amministratore</span>
+            <div class="user-section">
+                <div class="admin-badge" id="userBadge">
+                    <span uk-icon="icon: user; ratio: 1.1" style="color: #ffffff;"></span>
+                    <div class="user-info-container uk-hidden-small">
+                        <div class="user-name user-loading" id="userName">Caricamento...</div>
+                        <div class="user-email" id="userEmail"></div>
+                    </div>
+                </div>
+                <a href="logout" class="logout-btn" title="Esci dal sistema">
+                    <span uk-icon="icon: sign-out; ratio: 1"></span>
+                    <span class="uk-hidden-small">Logout</span>
+                </a>
             </div>
         </div>
     </nav>
@@ -1713,6 +1800,39 @@
             }
         `;
         document.head.appendChild(style);
+
+        // ============ Get User Information ============
+        function loadUserInfo() {
+            fetch('api/getuser')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load user information');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const userNameEl = document.getElementById('userName');
+                    const userEmailEl = document.getElementById('userEmail');
+                    
+                    // Update user information
+                    userNameEl.textContent = data.name || 'Amministratore';
+                    userEmailEl.textContent = data.email || '';
+                    
+                    // Remove loading animation
+                    userNameEl.classList.remove('user-loading');
+                })
+                .catch(error => {
+                    console.error('Error loading user information:', error);
+                    const userNameEl = document.getElementById('userName');
+                    userNameEl.textContent = 'Amministratore';
+                    userNameEl.classList.remove('user-loading');
+                });
+        }
+
+        // Load user information when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+        });
     </script>
 
 </body>

@@ -50,14 +50,39 @@ public class DBConnection {
 
     // Method that provides connection to external callers
     public static Connection getConnection() throws SQLException {
+        long startTime = System.currentTimeMillis();
+        
         try {
             DataSource dataSource = lookupDataSource();
             Connection conn = dataSource.getConnection();
-            logger.debug("DB: New connection acquired from pool.");
+            
+            long endTime = System.currentTimeMillis();
+            long acquisitionTime = endTime - startTime;
+            
+            if (acquisitionTime > 1000) {
+                logger.warn("DB: Slow connection acquisition detected - Time: {}ms", acquisitionTime);
+            } else {
+                logger.debug("DB: Connection acquired from pool in {}ms", acquisitionTime);
+            }
+            
+            // Log connection details in debug mode
+            if (logger.isDebugEnabled()) {
+                try {
+                    logger.debug("DB: Connection details - AutoCommit: {}, ReadOnly: {}, Closed: {}", 
+                               conn.getAutoCommit(), conn.isReadOnly(), conn.isClosed());
+                } catch (SQLException e) {
+                    logger.debug("DB: Could not retrieve connection details", e);
+                }
+            }
+            
             return conn;
         } catch (SQLException e) {
-            logger.error("DB: Error while acquiring connection!", e);
+            logger.error("DB: Failed to acquire connection - SQL State: {}, Error Code: {}", 
+                        e.getSQLState(), e.getErrorCode(), e);
             throw e;
+        } catch (Exception e) {
+            logger.error("DB: Unexpected error while acquiring connection", e);
+            throw new SQLException("Unexpected error acquiring connection", e);
         }
     }
 }

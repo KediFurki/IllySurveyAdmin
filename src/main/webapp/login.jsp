@@ -1,4 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%
+    // Prevent caching
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma", "no-cache");
+    response.setDateHeader("Expires", 0);
+    
+    // If user is already logged in, redirect to admin
+    HttpSession userSession = request.getSession(false);
+    if (userSession != null && userSession.getAttribute("genesysUser") != null) {
+        response.sendRedirect(request.getContextPath() + "/admin");
+        return;
+    }
+%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -185,6 +198,41 @@
             line-height: 1.5;
         }
 
+        /* ============ Notification Messages ============ */
+        .message-box {
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .message-success {
+            background: rgba(50, 210, 150, 0.1);
+            border-left: 4px solid #32d296;
+            color: #1e7e5e;
+        }
+
+        .message-info {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid #3498db;
+            color: #2574a9;
+        }
+
+        .message-warning {
+            background: rgba(241, 196, 15, 0.1);
+            border-left: 4px solid #f1c40f;
+            color: #9a7d0a;
+        }
+
+        .message-box-icon {
+            font-size: 1.3rem;
+        }
+
         .background-decoration {
             position: fixed;
             top: 0;
@@ -334,6 +382,22 @@
 
             <!-- Body -->
             <div class="login-body">
+                <!-- Logout Success Message -->
+                <% if ("success".equals(request.getParameter("logout"))) { %>
+                <div class="message-box message-success">
+                    <div class="message-box-icon">✓</div>
+                    <div>Logout effettuato con successo. A presto!</div>
+                </div>
+                <% } %>
+
+                <!-- Session Expired Message -->
+                <% if ("expired".equals(request.getParameter("session"))) { %>
+                <div class="message-box message-warning">
+                    <div class="message-box-icon">⚠</div>
+                    <div>La tua sessione è scaduta. Accedi nuovamente.</div>
+                </div>
+                <% } %>
+
                 <!-- Security Badge -->
                 <div class="security-badge">
                     <span uk-icon="icon: lock; ratio: 1.1"></span>

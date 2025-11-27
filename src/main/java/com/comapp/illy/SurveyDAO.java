@@ -25,41 +25,93 @@ public class SurveyDAO {
         "ORDER BY c.conversationstart DESC";
 
     public List<SurveyBean> getSurveys(String startDate, String endDate) {
+        logger.info("getSurveys called - Date range: {} to {}", startDate, endDate);
+        
         List<SurveyBean> list = new ArrayList<>();
         
         // Format dates for database query (append time component)
         String startParam = startDate + "T00:00:00.000Z";
         String endParam = endDate + "T23:59:59.999Z";
+        
+        logger.debug("Database query parameters - Start: {}, End: {}", startParam, endParam);
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(QUERY)) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            long startTime = System.currentTimeMillis();
             
+            conn = DBConnection.getConnection();
+            logger.debug("Database connection established");
+            
+            ps = conn.prepareStatement(QUERY);
             ps.setString(1, startParam);
             ps.setString(2, endParam);
             
-            logger.info("Executing query from {} to {}", startDate, endDate);
+            logger.debug("Executing survey query...");
+            rs = ps.executeQuery();
             
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    list.add(new SurveyBean(
-                        rs.getString("conversationid"),
-                        rs.getString("conversationstart"),
-                        rs.getString("ani"),
-                        rs.getString("surveyType"),
-                        rs.getString("surveyScore"),
-                        rs.getString("hasAudio")
-                    ));
-                }
+            int recordCount = 0;
+            while (rs.next()) {
+                list.add(new SurveyBean(
+                    rs.getString("conversationid"),
+                    rs.getString("conversationstart"),
+                    rs.getString("ani"),
+                    rs.getString("surveyType"),
+                    rs.getString("surveyScore"),
+                    rs.getString("hasAudio")
+                ));
+                recordCount++;
             }
             
-            logger.info("Successfully retrieved {} records", list.size());
+            long endTime = System.currentTimeMillis();
+            long executionTime = endTime - startTime;
+            
+            logger.info("Query executed successfully - Records: {}, Execution time: {}ms, Date range: {} to {}", 
+                       recordCount, executionTime, startDate, endDate);
+            
+            if (recordCount == 0) {
+                logger.warn("No survey records found for date range: {} to {}", startDate, endDate);
+            } else if (executionTime > 5000) {
+                logger.warn("Slow query detected - Execution time: {}ms for {} records", executionTime, recordCount);
+            }
             
         } catch (SQLException e) {
-            logger.error("Database error while fetching surveys from {} to {}", startDate, endDate, e);
+            logger.error("Database error while fetching surveys - Date range: {} to {}, SQL State: {}, Error Code: {}", 
+                        startDate, endDate, e.getSQLState(), e.getErrorCode(), e);
         } catch (Exception e) {
-            logger.error("Unexpected error while fetching surveys", e);
+            logger.error("Unexpected error while fetching surveys - Date range: {} to {}", 
+                        startDate, endDate, e);
+        } finally {
+            // Close resources in reverse order
+            if (rs != null) {
+                try {
+                    rs.close();
+                    logger.debug("ResultSet closed");
+                } catch (SQLException e) {
+                    logger.warn("Error closing ResultSet", e);
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                    logger.debug("PreparedStatement closed");
+                } catch (SQLException e) {
+                    logger.warn("Error closing PreparedStatement", e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                    logger.debug("Database connection closed");
+                } catch (SQLException e) {
+                    logger.warn("Error closing database connection", e);
+                }
+            }
         }
         
+        logger.debug("Returning {} survey records", list.size());
         return list;
     }
 }

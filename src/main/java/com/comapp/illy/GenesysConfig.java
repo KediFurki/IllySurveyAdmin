@@ -4,7 +4,7 @@ import java.util.Properties;
 
 public class GenesysConfig {
     
-    // Sabitleri siliyoruz, yerine Getter metotları koyuyoruz
+    // Using getter methods instead of constants to allow dynamic configuration
     
     public static String getRegion() {
         return getProperty("genesys.region", "mypurecloud.de");
@@ -22,7 +22,7 @@ public class GenesysConfig {
         return getProperty("genesys.redirect.uri", "http://localhost:8080/IllySurveyAdmin/oauth/callback");
     }
 
-    // Yardımcı Metot: ConfigServlet'ten veriyi çeker
+    // Helper method: retrieves data from ConfigServlet
     private static String getProperty(String key, String defaultValue) {
         Properties props = ConfigServlet.getProperties();
         if (props != null) {
