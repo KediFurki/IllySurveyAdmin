@@ -128,6 +128,7 @@ public class CallbackServlet extends HttpServlet {
                         
                         session.setAttribute("userName", userName);
                         session.setAttribute("userEmail", userEmail);
+                        session.setAttribute("userId", userId); // Store user ID for token invalidation
                         
                         logger.info("User authentication successful - Name: {}, Email: {}, UserID: {}, SessionID: {}", 
                                    userName, userEmail, userId, sessionId);

@@ -2,11 +2,9 @@ package com.comapp.illy;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,6 +37,7 @@ public class LogoutServlet extends HttpServlet {
         
         HttpSession session = request.getSession(false);
         String accessToken = null;
+        String userId = null;
         String sessionId = null;
         
         if (session != null) {
@@ -49,6 +48,7 @@ public class LogoutServlet extends HttpServlet {
             // Try to get user info before invalidating session
             try {
                 accessToken = (String) session.getAttribute("genesysUser");
+                userId = (String) session.getAttribute("userId");
                 
                 Object userNameObj = session.getAttribute("userName");
                 Object userEmailObj = session.getAttribute("userEmail");
@@ -64,10 +64,10 @@ public class LogoutServlet extends HttpServlet {
                     username = "User with token: " + accessToken.substring(0, Math.min(10, accessToken.length())) + "...";
                 }
                 
-                logger.info("Logout initiated - User: {}, Email: {}, SessionID: {}, IP: {}", 
-                           username, userEmail, sessionId, remoteAddr);
+                logger.info("Logout initiated - User: {}, Email: {}, UserID: {}, SessionID: {}, IP: {}", 
+                           username, userEmail, userId, sessionId, remoteAddr);
             } catch (Exception e) {
-                logger.warn("Could not retrieve username during logout - SessionID: {}", sessionId, e);
+                logger.warn("Could not retrieve user info during logout - SessionID: {}", sessionId, e);
             }
             
             logger.debug("Invalidating session: {}", sessionId);
@@ -86,16 +86,17 @@ public class LogoutServlet extends HttpServlet {
         response.setDateHeader("Expires", 0);
         logger.debug("Cache control headers set for logout response");
         
-        // Logout from Genesys if we have an access token
-        if (accessToken != null && !accessToken.isEmpty()) {
-            logger.info("Attempting to revoke Genesys token - SessionID: {}", sessionId);
+        // Invalidate token from Genesys if we have both token and userId
+        if (accessToken != null && !accessToken.isEmpty() && userId != null && !userId.isEmpty()) {
+            logger.info("Attempting to invalidate Genesys token - UserID: {}, SessionID: {}", userId, sessionId);
             try {
-                logoutFromGenesys(accessToken);
+                invalidateGenesysToken(accessToken, userId);
             } catch (Exception e) {
-                logger.warn("Failed to logout from Genesys, continuing with local logout - SessionID: {}", sessionId, e);
+                logger.warn("Failed to invalidate Genesys token, continuing with local logout - SessionID: {}", sessionId, e);
             }
         } else {
-            logger.debug("No access token to revoke");
+            logger.debug("No token or userId to invalidate - Token exists: {}, UserID exists: {}", 
+                        (accessToken != null && !accessToken.isEmpty()), (userId != null && !userId.isEmpty()));
         }
         
         // Redirect to login page with logout message
@@ -104,60 +105,58 @@ public class LogoutServlet extends HttpServlet {
     }
     
     /**
-     * Logout from Genesys Cloud by revoking the access token
+     * Invalidate token from Genesys Cloud by deleting it via API
+     * Uses DELETE /api/v2/tokens/{userId} endpoint
+     * This is more effective than OAuth revoke as it deletes the token completely
+     * Based on: https://api.mypurecloud.de/api/v2/tokens/{userId}
      */
-    private void logoutFromGenesys(String accessToken) {
-        logger.debug("Starting Genesys token revocation process");
+    private void invalidateGenesysToken(String accessToken, String userId) {
+        logger.debug("Starting Genesys token invalidation process for userId: {}", userId);
         
         try {
             String region = GenesysConfig.getRegion();
-            String tokenRevokeUrl = "https://login." + region + "/oauth/revoke";
+            // Use Genesys API to delete the token directly
+            String tokenDeleteUrl = "https://api." + region + "/api/v2/tokens/" + userId;
             
-            logger.debug("Token revocation URL: {}", tokenRevokeUrl);
+            logger.debug("Token delete URL: {}", tokenDeleteUrl);
+            logger.info("Invalidating token via DELETE {} for userId: {}", tokenDeleteUrl, userId);
             
-            String clientId = GenesysConfig.getClientId();
-            String clientSecret = GenesysConfig.getClientSecret();
-            
-            if (clientId == null || clientSecret == null) {
-                logger.warn("Cannot revoke Genesys token - credentials not configured (ClientID: {}, ClientSecret: {})",
-                           (clientId == null ? "null" : "exists"), (clientSecret == null ? "null" : "exists"));
-                return;
-            }
-            
-            logger.debug("Preparing token revocation request");
-            
-            // Prepare form data for token revocation
-            String formData = "token=" + URLEncoder.encode(accessToken, StandardCharsets.UTF_8) +
-                            "&client_id=" + URLEncoder.encode(clientId, StandardCharsets.UTF_8) +
-                            "&client_secret=" + URLEncoder.encode(clientSecret, StandardCharsets.UTF_8);
-            
-            HttpRequest revokeRequest = HttpRequest.newBuilder()
-                .uri(URI.create(tokenRevokeUrl))
-                .header("Content-Type", "application/x-www-form-urlencoded")
-                .POST(HttpRequest.BodyPublishers.ofString(formData))
+            // Make DELETE request to Genesys API
+            HttpRequest deleteRequest = HttpRequest.newBuilder()
+                .uri(URI.create(tokenDeleteUrl))
+                .header("Authorization", "Bearer " + accessToken)
+                .header("Content-Type", "application/json")
+                .DELETE()
                 .build();
             
-            logger.debug("Sending token revocation request to Genesys");
-            HttpResponse<String> revokeResponse = httpClient.send(revokeRequest, HttpResponse.BodyHandlers.ofString());
+            logger.debug("Sending DELETE request to Genesys API");
+            HttpResponse<String> deleteResponse = httpClient.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
             
-            int statusCode = revokeResponse.statusCode();
-            logger.debug("Token revocation response status: {}", statusCode);
+            int statusCode = deleteResponse.statusCode();
+            logger.debug("Token deletion response status: {}", statusCode);
             
+            // Genesys returns 200 or 204 for successful deletion
             if (statusCode == 200) {
-                logger.info("Successfully revoked Genesys access token - Region: {}", region);
+                logger.info("Successfully invalidated Genesys token (200 OK) - UserID: {}, Region: {}", userId, region);
+            } else if (statusCode == 204) {
+                // 204 No Content is also success
+                logger.info("Successfully invalidated Genesys token (204 No Content) - UserID: {}, Region: {}", userId, region);
+            } else if (statusCode == 404) {
+                // Token already deleted or doesn't exist
+                logger.warn("Token not found (404) - may already be deleted - UserID: {}", userId);
             } else {
-                String responseBody = revokeResponse.body();
-                logger.warn("Genesys token revocation returned non-200 status: {} - Response: {}", 
-                           statusCode, responseBody);
+                String responseBody = deleteResponse.body();
+                logger.warn("Token invalidation returned status: {} - UserID: {}, Response: {}", 
+                           statusCode, userId, responseBody);
             }
             
         } catch (InterruptedException e) {
-            logger.warn("Token revocation request interrupted", e);
+            logger.warn("Token invalidation request interrupted - UserID: {}", userId, e);
             Thread.currentThread().interrupt();
         } catch (Exception e) {
-            logger.error("Error revoking Genesys token - Error type: {}, Message: {}", 
-                        e.getClass().getSimpleName(), e.getMessage());
-            logger.debug("Token revocation error details", e);
+            logger.error("Error invalidating Genesys token - UserID: {}, Error type: {}, Message: {}", 
+                        userId, e.getClass().getSimpleName(), e.getMessage());
+            logger.debug("Token invalidation error details", e);
         }
     }
 }
