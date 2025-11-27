@@ -167,40 +167,6 @@ http://localhost:8080/IllySurveyAdmin/
 [INFO ] Successfully revoked Genesys access token
 ```
 
-## 🛠️ Troubleshooting
-
-### Issue: Logout button not visible
-**Solution**: Clear browser cache (Ctrl+Shift+Del) and hard refresh (Ctrl+F5)
-
-### Issue: Back button works after logout
-**Solution**: 
-1. Verify AuthFilter is active
-2. Check cache control headers
-3. Clear browser cache
-
-### Issue: Slow queries
-**Solution**: Check logs for "Slow query detected" warnings and optimize database indexes
-
-### Issue: Connection pool exhausted
-**Solution**: Increase maxTotal in context.xml
-
-## 📈 Performance Metrics
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| API Calls (per page load) | Every time | Once (cached) | 90%+ reduction |
-| Response Time | 500-1000ms | 10-50ms | 95% faster |
-| Logging | 15 statements | 95+ statements | 633% increase |
-| Security Level | Medium | High | 100% increase |
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open Pull Request
-
 ## 📝 License
 
 This project is proprietary software.
@@ -216,10 +182,6 @@ This project is proprietary software.
 - Apache Tomcat
 - PostgreSQL
 - Log4j2
-
-## 📞 Support
-
-For support, email: support@example.com
 
 ## 🔗 Links
 
