@@ -128,10 +128,6 @@
             font-weight: 500;
         }
 
-        .user-loading {
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
         /* ============ Logout Button ============ */
         .logout-btn {
             display: flex;
@@ -1202,8 +1198,12 @@
                 <div class="admin-badge" id="userBadge">
                     <span uk-icon="icon: user; ratio: 1.1" style="color: #ffffff;"></span>
                     <div class="user-info-container uk-hidden-small">
-                        <div class="user-name user-loading" id="userName">Caricamento...</div>
-                        <div class="user-email" id="userEmail"></div>
+                        <div class="user-name" id="userName">
+                            <%= session.getAttribute("userName") != null ? session.getAttribute("userName") : "Amministratore" %>
+                        </div>
+                        <div class="user-email" id="userEmail">
+                            <%= session.getAttribute("userEmail") != null ? session.getAttribute("userEmail") : "" %>
+                        </div>
                     </div>
                 </div>
                 <a href="logout" class="logout-btn" title="Esci dal sistema">
@@ -1800,39 +1800,6 @@
             }
         `;
         document.head.appendChild(style);
-
-        // ============ Get User Information ============
-        function loadUserInfo() {
-            fetch('api/getuser')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load user information');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const userNameEl = document.getElementById('userName');
-                    const userEmailEl = document.getElementById('userEmail');
-                    
-                    // Update user information
-                    userNameEl.textContent = data.name || 'Amministratore';
-                    userEmailEl.textContent = data.email || '';
-                    
-                    // Remove loading animation
-                    userNameEl.classList.remove('user-loading');
-                })
-                .catch(error => {
-                    console.error('Error loading user information:', error);
-                    const userNameEl = document.getElementById('userName');
-                    userNameEl.textContent = 'Amministratore';
-                    userNameEl.classList.remove('user-loading');
-                });
-        }
-
-        // Load user information when page loads
-        window.addEventListener('DOMContentLoaded', function() {
-            loadUserInfo();
-        });
     </script>
 
 </body>
