@@ -153,7 +153,7 @@ public class MainServlet extends HttpServlet {
                 response.setHeader("Content-Disposition", "attachment; filename=" + filename);
                 
                 PrintWriter out = response.getWriter();
-                out.println("Data,ID Interazione,Telefono,Tipo,Voto,Audio");
+                out.println("Date,Interaction ID,Phone,Type,Service (0-5),NPS (0-10),Audio");
                 
                 int exportedRecords = 0;
                 int recordsWithAudio = 0;
@@ -164,14 +164,15 @@ public class MainServlet extends HttpServlet {
                     String convId = s.getConversationId() != null ? s.getConversationId() : "";
                     String phone = s.getCustomerPhone() != null ? s.getCustomerPhone() : "";
                     String type = s.getType() != null ? s.getType() : "";
-                    String score = s.getScore() != null ? s.getScore() : "N/A";
+                    String scoreQ1 = s.getScoreQ1() != null ? s.getScoreQ1() : "N/A";
+                    String scoreQ2 = s.getScoreQ2() != null ? s.getScoreQ2() : "N/A";
                     String audio = s.getHasAudio() != null ? s.getHasAudio() : "";
                     
-                    out.printf("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"%n", date, convId, phone, type, score, audio);
+                    out.printf("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"%n", date, convId, phone, type, scoreQ1, scoreQ2, audio);
                     exportedRecords++;
                     
                     if ("true".equalsIgnoreCase(audio)) recordsWithAudio++;
-                    if (score != null && !score.equals("N/A")) recordsWithScore++;
+                    if ((scoreQ1 != null && !scoreQ1.equals("N/A")) || (scoreQ2 != null && !scoreQ2.equals("N/A"))) recordsWithScore++;
                 }
                 out.flush();
                 

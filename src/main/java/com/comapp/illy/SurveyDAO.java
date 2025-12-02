@@ -14,11 +14,15 @@ public class SurveyDAO {
 
     private static final String QUERY = 
         "SELECT c.conversationid, c.conversationstart, p.ani, " +
-        "attr_t.value AS surveyType, attr_s.value AS surveyScore, attr_a.value AS hasAudio " +
+        "attr_t.value AS surveyType, " +
+        "attr_s1.value AS surveyScoreQ1, " +
+        "attr_s2.value AS surveyScoreQ2, " +
+        "attr_a.value AS hasAudio " +
         "FROM public.conversations c " +
         "INNER JOIN public.participants p ON c.conversationid = p.conversationid " +
         "LEFT JOIN public.attributes attr_t ON p.participantid = attr_t.participantid AND attr_t.key = 'SurveyType' " +
-        "LEFT JOIN public.attributes attr_s ON p.participantid = attr_s.participantid AND attr_s.key = 'SurveyScore' " +
+        "LEFT JOIN public.attributes attr_s1 ON p.participantid = attr_s1.participantid AND attr_s1.key = 'SurveyScoreQ1' " +
+        "LEFT JOIN public.attributes attr_s2 ON p.participantid = attr_s2.participantid AND attr_s2.key = 'SurveyScoreQ2' " +
         "LEFT JOIN public.attributes attr_a ON p.participantid = attr_a.participantid AND attr_a.key = 'HasAudioFeedback' " +
         "WHERE p.partecipanttype = 'customer' " +
         "AND c.conversationstart >= ? AND c.conversationstart <= ? " +
@@ -59,7 +63,8 @@ public class SurveyDAO {
                     rs.getString("conversationstart"),
                     rs.getString("ani"),
                     rs.getString("surveyType"),
-                    rs.getString("surveyScore"),
+                    rs.getString("surveyScoreQ1"),
+                    rs.getString("surveyScoreQ2"),
                     rs.getString("hasAudio")
                 ));
                 recordCount++;

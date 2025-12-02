@@ -221,9 +221,9 @@ public class CallbackServlet extends HttpServlet {
                     logger.info("Session created successfully - SessionID: {}", sessionId);
                 }
                 
-                logger.info("--- Step 4: Redirecting to Admin Dashboard ---");
-                logger.info("--> Sending user to: {}/admin", request.getContextPath());
-                response.sendRedirect(request.getContextPath() + "/admin");
+                logger.info("--- Step 4: Redirecting to Login Success Page ---");
+                logger.info("--> Sending user to: {}/login-success.jsp (for popup flow)", request.getContextPath());
+                response.sendRedirect(request.getContextPath() + "/login-success.jsp");
                 logger.info("[+] OAuth authentication flow completed successfully");
                 
             } else {

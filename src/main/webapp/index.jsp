@@ -15,11 +15,11 @@
 %>
 
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Illy - Report Sondaggi</title>
+    <title>Illy - Survey Reports</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/css/uikit.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.17.11/dist/js/uikit.min.js"></script>
@@ -1199,14 +1199,14 @@
                     <span uk-icon="icon: user; ratio: 1.1" style="color: #ffffff;"></span>
                     <div class="user-info-container uk-hidden-small">
                         <div class="user-name" id="userName">
-                            <%= session.getAttribute("userName") != null ? session.getAttribute("userName") : "Amministratore" %>
+                            <%= session.getAttribute("userName") != null ? session.getAttribute("userName") : "Administrator" %>
                         </div>
                         <div class="user-email" id="userEmail">
                             <%= session.getAttribute("userEmail") != null ? session.getAttribute("userEmail") : "" %>
                         </div>
                     </div>
                 </div>
-                <a href="logout" class="logout-btn" title="Esci dal sistema">
+                <a href="logout" class="logout-btn" title="Exit the system">
                     <span uk-icon="icon: sign-out; ratio: 1"></span>
                     <span class="uk-hidden-small">Logout</span>
                 </a>
@@ -1219,28 +1219,28 @@
         
         <!-- Stats Section -->
         <div class="stats-container">
-            <div class="stat-card" uk-tooltip="title: Numero totale di sondaggi raccolti; pos: top">
-                <h4><span uk-icon="icon: check; ratio: 0.9"></span> Totale Sondaggi</h4>
+            <div class="stat-card" uk-tooltip="title: Total number of surveys collected; pos: top">
+                <h4><span uk-icon="icon: check; ratio: 0.9"></span> Total Surveys</h4>
                 <div class="stat-value">${fn:length(reportList)}</div>
-                <div class="stat-change">✓ Completati</div>
+                <div class="stat-change">✓ Completed</div>
             </div>
             
-            <div class="stat-card" uk-tooltip="title: Sondaggi con valutazione bassa; pos: top">
-                <h4><span uk-icon="icon: close; ratio: 0.9"></span> Valutazioni Basse</h4>
+            <div class="stat-card" uk-tooltip="title: Surveys with low rating; pos: top">
+                <h4><span uk-icon="icon: close; ratio: 0.9"></span> Low Ratings</h4>
                 <div class="stat-value" id="lowScoreCount">0</div>
-                <div class="stat-change">Voto &lt; 6</div>
+                <div class="stat-change">Score &lt; 6</div>
             </div>
             
-            <div class="stat-card" uk-tooltip="title: Sondaggi con valutazione alta; pos: top">
-                <h4><span uk-icon="icon: check; ratio: 0.9"></span> Valutazioni Alte</h4>
+            <div class="stat-card" uk-tooltip="title: Surveys with high rating; pos: top">
+                <h4><span uk-icon="icon: check; ratio: 0.9"></span> High Ratings</h4>
                 <div class="stat-value" id="highScoreCount">0</div>
-                <div class="stat-change">Voto ≥ 6</div>
+                <div class="stat-change">Score ≥ 6</div>
             </div>
             
-            <div class="stat-card" uk-tooltip="title: Numero di audio disponibili; pos: top">
-                <h4><span uk-icon="icon: microphone; ratio: 0.9"></span> Audio Disponibili</h4>
+            <div class="stat-card" uk-tooltip="title: Number of available audio files; pos: top">
+                <h4><span uk-icon="icon: microphone; ratio: 0.9"></span> Available Audio</h4>
                 <div class="stat-value" id="audioCount">0</div>
-                <div class="stat-change">Registrazioni</div>
+                <div class="stat-change">Recordings</div>
             </div>
         </div>
         
@@ -1249,7 +1249,7 @@
             <h3 class="filter-header" onclick="toggleFilterPanel()" style="margin: 0; padding: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                     <span uk-icon="icon: filter" style="color: #ffffff;"></span> 
-                    <span>Filtri Ricerca Avanzata</span>
+                    <span>Advanced Search Filters</span>
                     <span id="filterBadge" style="background: rgba(255, 255, 255, 0.3); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.85rem; font-weight: 600; display: none; white-space: nowrap;"></span>
                 </div>
                 <span class="filter-toggle-icon" id="filterToggleIcon" uk-icon="icon: chevron-down; ratio: 1.2" style="color: #ffffff;"></span>
@@ -1260,7 +1260,7 @@
                     <div class="uk-grid-small uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
                         <div>
                             <label class="uk-form-label" for="start">
-                                <span uk-icon="icon: calendar; ratio: 0.9"></span> Dal
+                                <span uk-icon="icon: calendar; ratio: 0.9"></span> From
                             </label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="start" type="date" name="startDate" value="${startDate}" required>
@@ -1268,7 +1268,7 @@
                         </div>
                         <div>
                             <label class="uk-form-label" for="end">
-                                <span uk-icon="icon: calendar; ratio: 0.9"></span> Al
+                                <span uk-icon="icon: calendar; ratio: 0.9"></span> To
                             </label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="end" type="date" name="endDate" value="${endDate}" required>
@@ -1276,7 +1276,7 @@
                         </div>
                         <div>
                             <label class="uk-form-label" for="conversationId">
-                                <span uk-icon="icon: link; ratio: 0.9"></span> ID Int.
+                                <span uk-icon="icon: link; ratio: 0.9"></span> Conv. ID
                             </label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="conversationId" type="text" name="conversationId" placeholder="ID..." value="${param.conversationId}">
@@ -1284,7 +1284,7 @@
                         </div>
                         <div>
                             <label class="uk-form-label" for="phone">
-                                <span uk-icon="icon: phone; ratio: 0.9"></span> Tel.
+                                <span uk-icon="icon: phone; ratio: 0.9"></span> Phone
                             </label>
                             <div class="uk-form-controls">
                                 <input class="uk-input" id="phone" type="text" name="phone" placeholder="+39..." value="${param.phone}">
@@ -1295,51 +1295,51 @@
                     <div class="uk-margin-top uk-grid-small uk-child-width-1-2@s uk-child-width-1-4@m" uk-grid>
                         <div>
                             <label class="uk-form-label" for="type">
-                                <span uk-icon="icon: tag; ratio: 0.9"></span> Categoria
+                                <span uk-icon="icon: tag; ratio: 0.9"></span> Category
                             </label>
                             <div class="uk-form-controls">
                                 <select class="uk-select" id="type" name="type">
-                                    <option value="">Tutti</option>
-                                    <option value="BtoB" ${param.type == 'BtoB' ? 'selected' : ''}>BtoB</option>
-                                    <option value="BtoC" ${param.type == 'BtoC' ? 'selected' : ''}>BtoC</option>
+                                    <option value="">All</option>
+                                    <option value="B2B" ${param.type == 'B2B' ? 'selected' : ''}>B2B</option>
+                                    <option value="B2C" ${param.type == 'B2C' ? 'selected' : ''}>B2C</option>
                                 </select>
                             </div>
                         </div>
                         <div>
                             <label class="uk-form-label" for="score">
-                                <span uk-icon="icon: star; ratio: 0.9"></span> Valutaz.
+                                <span uk-icon="icon: star; ratio: 0.9"></span> Rating
                             </label>
                             <div class="uk-form-controls">
                                 <select class="uk-select" id="score" name="score">
-                                    <option value="">Tutte</option>
-                                    <option value="0-5" ${param.score == '0-5' ? 'selected' : ''}>Bassa</option>
-                                    <option value="6-10" ${param.score == '6-10' ? 'selected' : ''}>Alta</option>
-                                    <option value="none" ${param.score == 'none' ? 'selected' : ''}>Senza</option>
+                                    <option value="">All</option>
+                                    <option value="0-5" ${param.score == '0-5' ? 'selected' : ''}>Low</option>
+                                    <option value="6-10" ${param.score == '6-10' ? 'selected' : ''}>High</option>
+                                    <option value="none" ${param.score == 'none' ? 'selected' : ''}>None</option>
                                 </select>
                             </div>
                         </div>
                         <div>
                             <label class="uk-form-label" for="audio">
-                                <span uk-icon="icon: microphone; ratio: 0.9"></span> Registro
+                                <span uk-icon="icon: microphone; ratio: 0.9"></span> Audio
                             </label>
                             <div class="uk-form-controls">
                                 <select class="uk-select" id="audio" name="audio">
-                                    <option value="">Tutti</option>
-                                    <option value="yes" ${param.audio == 'yes' ? 'selected' : ''}>Con</option>
-                                    <option value="no" ${param.audio == 'no' ? 'selected' : ''}>Senza</option>
+                                    <option value="">All</option>
+                                    <option value="yes" ${param.audio == 'yes' ? 'selected' : ''}>With</option>
+                                    <option value="no" ${param.audio == 'no' ? 'selected' : ''}>Without</option>
                                 </select>
                             </div>
                         </div>
                         <div>
                             <label class="uk-form-label">&nbsp;</label>
                             <div class="uk-form-controls uk-flex uk-gap" style="gap: 0.5rem;">
-                                <button type="submit" class="btn-filter" style="flex: 1;" title="Applica filtri">
+                                <button type="submit" class="btn-filter" style="flex: 1;" title="Apply filters">
                                     <span uk-icon="icon: search; ratio: 0.9"></span>
                                 </button>
-                                <button type="button" class="btn-reset" onclick="resetFilters()" title="Azzera filtri">
+                                <button type="button" class="btn-reset" onclick="resetFilters()" title="Reset filters">
                                     <span uk-icon="icon: refresh; ratio: 0.9"></span>
                                 </button>
-                                <a href="admin?action=export&startDate=${startDate}&endDate=${endDate}&type=${param.type}&score=${param.score}&audio=${param.audio}" class="btn-export" uk-tooltip="title: Scarica CSV" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                                <a href="admin?action=export&startDate=${startDate}&endDate=${endDate}&type=${param.type}&score=${param.score}&audio=${param.audio}" class="btn-export" uk-tooltip="title: Download CSV" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">
                                     <span uk-icon="icon: download; ratio: 0.9"></span>
                                 </a>
                             </div>
@@ -1356,19 +1356,22 @@
                     <thead>
                         <tr>
                             <th class="uk-width-small">
-                                <span uk-icon="icon: calendar; ratio: 0.9" style="color: #ffffff;"></span> Data
+                                <span uk-icon="icon: calendar; ratio: 0.9" style="color: #ffffff;"></span> Date
                             </th>
                             <th>
-                                <span uk-icon="icon: link; ratio: 0.9" style="color: #ffffff;"></span> ID Interazione
+                                <span uk-icon="icon: link; ratio: 0.9" style="color: #ffffff;"></span> Interaction ID
                             </th>
                             <th>
-                                <span uk-icon="icon: phone; ratio: 0.9" style="color: #ffffff;"></span> Telefono
+                                <span uk-icon="icon: phone; ratio: 0.9" style="color: #ffffff;"></span> Phone
                             </th>
                             <th>
-                                <span uk-icon="icon: tag; ratio: 0.9" style="color: #ffffff;"></span> Tipo
+                                <span uk-icon="icon: tag; ratio: 0.9" style="color: #ffffff;"></span> Type
                             </th>
                             <th class="uk-width-small">
-                                <span uk-icon="icon: star; ratio: 0.9" style="color: #ffffff;"></span> Voto
+                                <span uk-icon="icon: star; ratio: 0.9" style="color: #ffffff;"></span> Service<br><span class="uk-text-small" style="opacity: 0.85; font-weight: 500;">(0-5)</span>
+                            </th>
+                            <th class="uk-width-small">
+                                <span uk-icon="icon: star; ratio: 0.9" style="color: #ffffff;"></span> NPS<br><span class="uk-text-small" style="opacity: 0.85; font-weight: 500;">(0-10)</span>
                             </th>
                             <th class="uk-width-small">
                                 <span uk-icon="icon: microphone; ratio: 0.9" style="color: #ffffff;"></span> Audio
@@ -1378,10 +1381,10 @@
                     <tbody>
                         <c:if test="${empty reportList}">
                             <tr>
-                                <td colspan="6" class="table-empty">
+                                <td colspan="7" class="table-empty">
                                     <div uk-icon="icon: info; ratio: 3" style="color: #ddd; margin-bottom: 1rem; opacity: 0.5;"></div>
-                                    <div style="font-weight: 600; font-size: 1.1rem;">Nessun dato trovato</div>
-                                    <div style="color: #bbb; margin-top: 0.5rem;">Nessun sondaggio per i filtri selezionati</div>
+                                    <div style="font-weight: 600; font-size: 1.1rem;">No data found</div>
+                                    <div style="color: #bbb; margin-top: 0.5rem;">No surveys for the selected filters</div>
                                 </td>
                             </tr>
                         </c:if>
@@ -1389,13 +1392,20 @@
                         <c:forEach var="item" items="${reportList}">
                             <tr>
                                 <td>
-                                    <div class="date-badge">
-                                        <span class="date-badge-icon" uk-icon="icon: calendar; ratio: 1"></span>
-                                        <span class="date-badge-text">
-                                            <span class="date-badge-label">Data</span>
-                                            <span class="date-badge-value" id="date-${item.conversationId}">${item.date}</span>
-                                        </span>
-                                    </div>
+                                    <c:choose>
+                                        <c:when test="${not empty item.date}">
+                                            <div class="date-badge">
+                                                <span class="date-badge-icon" uk-icon="icon: calendar; ratio: 1"></span>
+                                                <span class="date-badge-text">
+                                                    <span class="date-badge-label">Date</span>
+                                                    <span class="date-badge-value" data-raw-date="${item.date}">${fn:substring(item.date, 0, 10)} ${fn:substring(item.date, 11, 16)}</span>
+                                                </span>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span style="color: #999;">-</span>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </td>
                                 <td>
                                     <span class="conversation-id">${item.conversationId}</span>
@@ -1404,24 +1414,37 @@
                                     <strong>${item.customerPhone}</strong>
                                 </td>
                                 <td>
-                                    <span class="type-badge" uk-tooltip="title: Tipo di sondaggio">${item.type != null ? item.type : '-'}</span>
+                                    <span class="type-badge" uk-tooltip="title: Survey type">${item.type != null ? item.type : '-'}</span>
                                 </td>
                                 <td>
                                     <c:choose>
-                                        <c:when test="${item.score == null || item.score == ''}">
-                                            <span class="score-badge" style="background: #f0f0f0; color: #999;" uk-tooltip="title: Senza voto">-</span>
+                                        <c:when test="${item.scoreQ1 == null || item.scoreQ1 == ''}">
+                                            <span class="score-badge" style="background: #f0f0f0; color: #999;" uk-tooltip="title: No score">-</span>
                                         </c:when>
-                                        <c:when test="${item.score < 6}">
-                                            <span class="score-badge score-low" uk-tooltip="title: Valutazione bassa (minore di 6)">${item.score}</span>
+                                        <c:when test="${item.scoreQ1 < 3}">
+                                            <span class="score-badge score-low" uk-tooltip="title: Low rating (less than 3)">${item.scoreQ1}</span>
                                         </c:when>
                                         <c:otherwise>
-                                            <span class="score-badge score-high" uk-tooltip="title: Valutazione buona (uguale o superiore a 6)">${item.score}</span>
+                                            <span class="score-badge score-high" uk-tooltip="title: Good rating (3 or higher)">${item.scoreQ1}</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${item.scoreQ2 == null || item.scoreQ2 == ''}">
+                                            <span class="score-badge" style="background: #f0f0f0; color: #999;" uk-tooltip="title: No score">-</span>
+                                        </c:when>
+                                        <c:when test="${item.scoreQ2 < 6}">
+                                            <span class="score-badge score-low" uk-tooltip="title: Low rating (less than 6)">${item.scoreQ2}</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="score-badge score-high" uk-tooltip="title: Good rating (6 or higher)">${item.scoreQ2}</span>
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
                                 <td>
                                     <c:if test="${item.hasAudio == 'true'}">
-                                        <span class="audio-icon" uk-icon="microphone" uk-tooltip="title: Audio disponibile per questa interazione" onclick="openAudioModal('${item.conversationId}')"></span>
+                                        <span class="audio-icon" uk-icon="microphone" uk-tooltip="title: Audio available for this conversation" onclick="openAudioModal('${item.conversationId}')"></span>
                                     </c:if>
                                     <c:if test="${item.hasAudio != 'true'}">
                                         <span style="color: #ddd; opacity: 0.5;">-</span>
@@ -1441,12 +1464,12 @@
         <div class="uk-modal-dialog uk-modal-body">
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <h2 class="uk-modal-title" style="color: var(--illy-red);">
-                <span uk-icon="icon: microphone; ratio: 1.2"></span> Riproduttore Audio
+                <span uk-icon="icon: microphone; ratio: 1.2"></span> Audio Player
             </h2>
             
             <div class="uk-margin-top">
                 <p style="color: #666; margin-bottom: 1rem; font-weight: 600;">
-                    <span uk-icon="icon: link; ratio: 0.9"></span> ID Interazione: <strong id="audio-modal-id" style="color: var(--illy-red);">-</strong>
+                    <span uk-icon="icon: link; ratio: 0.9"></span> Interaction ID: <strong id="audio-modal-id" style="color: var(--illy-red);">-</strong>
                 </p>
             </div>
 
@@ -1456,20 +1479,20 @@
                     <div class="audio-controls">
                         <div class="audio-button-group">
                             <!-- Play Button -->
-                            <button class="audio-play-btn" id="playBtn" onclick="playAudio()" style="display: flex;" title="Riproduci">
+                            <button class="audio-play-btn" id="playBtn" onclick="playAudio()" style="display: flex;" title="Play">
                                 ▶
                             </button>
                             
                             <!-- Pause Button -->
-                            <button class="audio-pause-btn" id="pauseBtn" onclick="pauseAudio()" style="display: none;" title="Pausa">
+                            <button class="audio-pause-btn" id="pauseBtn" onclick="pauseAudio()" style="display: none;" title="Pause">
                                 ⏸
                             </button>
 
                             <!-- Skip Buttons -->
-                            <button class="audio-skip-button" id="rewindBtn" onclick="rewindAudio()" title="Indietro 5 secondi">
+                            <button class="audio-skip-button" id="rewindBtn" onclick="rewindAudio()" title="Rewind 5 seconds">
                                 -5s
                             </button>
-                            <button class="audio-skip-button" id="forwardBtn" onclick="forwardAudio()" title="Avanti 5 secondi">
+                            <button class="audio-skip-button" id="forwardBtn" onclick="forwardAudio()" title="Forward 5 seconds">
                                 +5s
                             </button>
                         </div>
@@ -1491,7 +1514,7 @@
                         <div class="audio-volume-icon">
                             <span uk-icon="icon: volume-high; ratio: 1"></span>
                         </div>
-                        <input type="range" class="audio-volume-slider" id="volumeSlider" min="0" max="100" value="100" onchange="setVolume(this.value)" title="Regola il volume">
+                        <input type="range" class="audio-volume-slider" id="volumeSlider" min="0" max="100" value="100" onchange="setVolume(this.value)" title="Adjust volume">
                         <div class="audio-volume-value" id="volumeValue">100%</div>
                     </div>
                 </div>
@@ -1499,18 +1522,18 @@
 
             <!-- Hidden audio element -->
             <audio id="audio-player" style="display: none;">
-                Il tuo browser non supporta la riproduzione audio.
+                Your browser does not support audio playback.
             </audio>
 
             <div style="margin-top: 1rem; padding: 1rem; background: rgba(217, 56, 30, 0.05); border-radius: 8px; border-left: 4px solid var(--illy-red);">
                 <p style="margin: 0; font-size: 0.9rem; color: #666;">
                     <span uk-icon="icon: info; ratio: 0.8"></span> 
-                    Riproduci e controlla la registrazione con i pulsanti. Usa +5s e -5s per saltare velocemente.
+                    Play and control the recording with the buttons. Use +5s and -5s to skip quickly.
                 </p>
             </div>
 
             <div class="uk-text-right uk-margin-top">
-                <button class="uk-button uk-button-default uk-modal-close" onclick="stopAudio()">Chiudi</button>
+                <button class="uk-button uk-button-default uk-modal-close" onclick="stopAudio()">Close</button>
             </div>
         </div>
     </div>
@@ -1520,21 +1543,21 @@
         <div class="uk-modal-dialog uk-modal-body uk-form-stacked">
             <button class="uk-modal-close-default" type="button" uk-close></button>
             <h2 class="uk-modal-title" style="color: var(--illy-red);">
-                <span uk-icon="icon: info; ratio: 1.2"></span> Dettagli Sondaggio
+                <span uk-icon="icon: info; ratio: 1.2"></span> Survey Details
             </h2>
             <div id="details-content" class="uk-margin-top">
-                <!-- Contenuto caricato dinamicamente -->
+                <!-- Content loaded dynamically -->
             </div>
             <div class="uk-text-right">
-                <button class="uk-button uk-button-default uk-modal-close">Chiudi</button>
+                <button class="uk-button uk-button-default uk-modal-close">Close</button>
             </div>
         </div>
     </div>
 
     <footer class="illy-footer">
-        <div>© 2025 Illy Survey Admin - Tutti i diritti riservati</div>
+        <div>© 2025 Illy Survey Admin - All rights reserved</div>
         <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #bbb;">
-            <span uk-icon="icon: shield; ratio: 0.8"></span> Sistema Sicuro e Protetto
+            <span uk-icon="icon: shield; ratio: 0.8"></span> Secure and Protected System
         </div>
     </footer>
 
@@ -1555,49 +1578,21 @@
 
         // Reset all filters
         function resetFilters() {
-            // Tüm input ve select'leri sıfırla
+            // Reset all inputs and selects
             document.getElementById('conversationId').value = '';
             document.getElementById('phone').value = '';
             document.getElementById('type').value = '';
             document.getElementById('score').value = '';
             document.getElementById('audio').value = '';
             
-            // Badge'i güncelle
+            // Update badge
             updateFilterBadge();
             
-            // Ana sayfa URL'sine yönlendir (tüm filtresiz)
+            // Redirect to main page (without filters)
             window.location.href = 'admin';
         }
 
-        // Format date to readable format
-        function formatDateBadge() {
-            const dateElements = document.querySelectorAll('[id^="date-"]');
-            dateElements.forEach(el => {
-                const dateStr = el.textContent.trim();
-                if (dateStr && dateStr !== '-') {
-                    try {
-                        // Parse ISO format (YYYY-MM-DD) or timestamp
-                        const date = new Date(dateStr);
-                        if (!isNaN(date.getTime())) {
-                            const options = { 
-                                weekday: 'short', 
-                                year: 'numeric', 
-                                month: 'short', 
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            };
-                            const formatted = new Intl.DateTimeFormat('it-IT', options).format(date);
-                            el.textContent = formatted;
-                        }
-                    } catch(e) {
-                        console.log('Date format error:', e);
-                    }
-                }
-            });
-        }
-
-        // ...existing code...
+        // Update filter badge
         function updateFilterBadge() {
             const badge = document.getElementById('filterBadge');
             const conversationId = document.getElementById('conversationId').value;
@@ -1610,11 +1605,11 @@
             if (conversationId) activeFilters.push(conversationId);
             if (phone) activeFilters.push(phone);
             if (type) activeFilters.push(type);
-            if (score) activeFilters.push(score === '0-5' ? 'Bassa' : score === '6-10' ? 'Alta' : 'Senza voto');
-            if (audio) activeFilters.push(audio === 'yes' ? 'Con Audio' : 'Senza Audio');
+            if (score) activeFilters.push(score === '0-5' ? 'Low' : score === '6-10' ? 'High' : 'No score');
+            if (audio) activeFilters.push(audio === 'yes' ? 'With Audio' : 'Without Audio');
             
             if (activeFilters.length > 0) {
-                badge.textContent = `${activeFilters.length} filtro${activeFilters.length > 1 ? 'i' : ''} attivo`;
+                badge.textContent = `${activeFilters.length} filter${activeFilters.length > 1 ? 's' : ''} active`;
                 badge.style.display = 'inline-block';
             } else {
                 badge.style.display = 'none';
@@ -1742,7 +1737,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             calculateStats();
             updateFilterBadge();
-            formatDateBadge();
             
             // Update filter badge when inputs change
             document.querySelectorAll('#conversationId, #phone, #type, #score, #audio').forEach(input => {
