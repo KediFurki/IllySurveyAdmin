@@ -1,10 +1,6 @@
 package com.comapp.illy;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +15,6 @@ import jakarta.servlet.http.HttpSession;
 public class LogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = LogManager.getLogger(LogoutServlet.class);
-    private final HttpClient httpClient = HttpClient.newHttpClient();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -86,77 +81,12 @@ public class LogoutServlet extends HttpServlet {
         response.setDateHeader("Expires", 0);
         logger.debug("Cache control headers set for logout response");
         
-        // Invalidate token from Genesys if we have both token and userId
-        if (accessToken != null && !accessToken.isEmpty() && userId != null && !userId.isEmpty()) {
-            logger.info("Attempting to invalidate Genesys token - UserID: {}, SessionID: {}", userId, sessionId);
-            try {
-                invalidateGenesysToken(accessToken, userId);
-            } catch (Exception e) {
-                logger.warn("Failed to invalidate Genesys token, continuing with local logout - SessionID: {}", sessionId, e);
-            }
-        } else {
-            logger.debug("No token or userId to invalidate - Token exists: {}, UserID exists: {}", 
-                        (accessToken != null && !accessToken.isEmpty()), (userId != null && !userId.isEmpty()));
-        }
+        // EMBEDDED APP MODE: Do NOT invalidate Genesys session
+        // This allows the user to log back in without re-entering credentials
+        logger.info("Embedded App Mode: Skipping Genesys token invalidation to maintain SSO session");
         
-        // Redirect to login page with logout message
+        // Redirect to login page with logout=true flag to prevent auto-login
         logger.info("Logout completed successfully, redirecting to login page - SessionID: {}", sessionId);
-        response.sendRedirect(request.getContextPath() + "/login.jsp?logout=success");
-    }
-    
-    /**
-     * Invalidate token from Genesys Cloud by deleting it via API
-     * Uses DELETE /api/v2/tokens/{userId} endpoint
-     * This is more effective than OAuth revoke as it deletes the token completely
-     * Based on: https://api.mypurecloud.de/api/v2/tokens/{userId}
-     */
-    private void invalidateGenesysToken(String accessToken, String userId) {
-        logger.debug("Starting Genesys token invalidation process for userId: {}", userId);
-        
-        try {
-            String region = GenesysConfig.getRegion();
-            // Use Genesys API to delete the token directly
-            String tokenDeleteUrl = "https://api." + region + "/api/v2/tokens/" + userId;
-            
-            logger.debug("Token delete URL: {}", tokenDeleteUrl);
-            logger.info("Invalidating token via DELETE {} for userId: {}", tokenDeleteUrl, userId);
-            
-            // Make DELETE request to Genesys API
-            HttpRequest deleteRequest = HttpRequest.newBuilder()
-                .uri(URI.create(tokenDeleteUrl))
-                .header("Authorization", "Bearer " + accessToken)
-                .header("Content-Type", "application/json")
-                .DELETE()
-                .build();
-            
-            logger.debug("Sending DELETE request to Genesys API");
-            HttpResponse<String> deleteResponse = httpClient.send(deleteRequest, HttpResponse.BodyHandlers.ofString());
-            
-            int statusCode = deleteResponse.statusCode();
-            logger.debug("Token deletion response status: {}", statusCode);
-            
-            // Genesys returns 200 or 204 for successful deletion
-            if (statusCode == 200) {
-                logger.info("Successfully invalidated Genesys token (200 OK) - UserID: {}, Region: {}", userId, region);
-            } else if (statusCode == 204) {
-                // 204 No Content is also success
-                logger.info("Successfully invalidated Genesys token (204 No Content) - UserID: {}, Region: {}", userId, region);
-            } else if (statusCode == 404) {
-                // Token already deleted or doesn't exist
-                logger.warn("Token not found (404) - may already be deleted - UserID: {}", userId);
-            } else {
-                String responseBody = deleteResponse.body();
-                logger.warn("Token invalidation returned status: {} - UserID: {}, Response: {}", 
-                           statusCode, userId, responseBody);
-            }
-            
-        } catch (InterruptedException e) {
-            logger.warn("Token invalidation request interrupted - UserID: {}", userId, e);
-            Thread.currentThread().interrupt();
-        } catch (Exception e) {
-            logger.error("Error invalidating Genesys token - UserID: {}, Error type: {}, Message: {}", 
-                        userId, e.getClass().getSimpleName(), e.getMessage());
-            logger.debug("Token invalidation error details", e);
-        }
+        response.sendRedirect(request.getContextPath() + "/login.jsp?logout=true");
     }
 }

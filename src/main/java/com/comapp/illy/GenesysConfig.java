@@ -19,7 +19,7 @@ public class GenesysConfig {
     }
 
     public static String getRedirectUri() {
-        return getProperty("genesys.redirect.uri", "http://localhost:8080/IllySurveyAdmin/oauth/callback");
+        return getProperty("genesys.redirect.uri", "https://locahost:8443/IllySurveyAdmin/oauth/callback");
     }
 
     // Helper method: retrieves data from ConfigServlet

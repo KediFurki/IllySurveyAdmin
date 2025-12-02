@@ -358,9 +358,67 @@
                 font-size: 1rem;
             }
         }
+
+        /* Auto-Login Loading Overlay */
+        .auto-login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .auto-login-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .auto-login-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        .auto-login-text {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Auto-Login Loading Overlay -->
+    <div id="autoLoginOverlay" class="auto-login-overlay hidden">
+        <div class="auto-login-spinner"></div>
+        <div class="auto-login-text">
+            <div>Logging in automatically...</div>
+            <div style="font-size: 0.9rem; margin-top: 0.5rem; opacity: 0.9;">Please wait</div>
+        </div>
+    </div>
+
     <!-- Background Decoration -->
     <div class="background-decoration">
         <div class="shape shape-1"></div>
@@ -383,7 +441,7 @@
             <!-- Body -->
             <div class="login-body">
                 <!-- Logout Success Message -->
-                <% if ("success".equals(request.getParameter("logout"))) { %>
+                <% if ("true".equals(request.getParameter("logout"))) { %>
                 <div class="message-box message-success">
                     <div class="message-box-icon">✓</div>
                     <div>Logout successful. See you soon!</div>
@@ -419,21 +477,10 @@
                     </div>
                 </div>
 
-                <!-- Popup Notice -->
-                <div style="background: rgba(102, 126, 234, 0.1); border-left: 4px solid #667eea; 
-                            padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; font-size: 0.9rem;">
-                    <div style="color: #667eea; font-weight: 700; margin-bottom: 0.5rem;">
-                        <span uk-icon="icon: warning; ratio: 0.9"></span> Popup Window Required
-                    </div>
-                    <div style="color: #555; line-height: 1.5;">
-                        Login opens in a secure popup window. Please allow popups for this site if prompted by your browser.
-                    </div>
-                </div>
-
                 <!-- Login Button -->
-                <button onclick="openLoginPopup()" class="btn-login">
+                <a href="login" class="btn-login">
                     <span uk-icon="icon: sign-in; ratio: 1.1"></span> Login with Genesys
-                </button>
+                </a>
             </div>
 
             <!-- Footer -->
@@ -446,91 +493,35 @@
         </div>
     </div>
 
-    <!-- Popup Blocker Warning Modal -->
-    <div id="popup-blocked-modal" uk-modal>
-        <div class="uk-modal-dialog uk-modal-body" style="border-radius: 15px;">
-            <button class="uk-modal-close-default" type="button" uk-close></button>
-            <div style="text-align: center; padding: 1rem;">
-                <div style="font-size: 4rem; color: #f0506e; margin-bottom: 1rem;">⚠️</div>
-                <h2 class="uk-modal-title" style="color: #d9381e; font-weight: 700;">Popup Blocked!</h2>
-                <p style="font-size: 1.1rem; margin: 1.5rem 0; color: #666;">
-                    Your browser has blocked the login popup window. Please allow popups to continue.
-                </p>
-                
-                <div style="background: #f8f8f8; padding: 1.5rem; border-radius: 10px; margin: 1.5rem 0; text-align: left;">
-                    <h3 style="color: #333; font-size: 1rem; margin-bottom: 1rem; font-weight: 700;">
-                        <span uk-icon="icon: info; ratio: 0.9"></span> How to Allow Popups:
-                    </h3>
-                    
-                    <div style="margin-bottom: 1rem;">
-                        <strong style="color: #d9381e;">Chrome / Edge:</strong>
-                        <ol style="margin-top: 0.5rem; padding-left: 1.5rem; color: #555;">
-                            <li>Look for the popup blocker icon <span style="background: #eee; padding: 2px 6px; border-radius: 3px;">🚫</span> in the address bar</li>
-                            <li>Click it and select "Always allow popups from this site"</li>
-                            <li>Click "Done" and try logging in again</li>
-                        </ol>
-                    </div>
-                    
-                    <div style="margin-bottom: 1rem;">
-                        <strong style="color: #d9381e;">Firefox:</strong>
-                        <ol style="margin-top: 0.5rem; padding-left: 1.5rem; color: #555;">
-                            <li>Click "Preferences" in the notification bar</li>
-                            <li>Choose "Allow popups for this site"</li>
-                            <li>Try logging in again</li>
-                        </ol>
-                    </div>
-                    
-                    <div>
-                        <strong style="color: #d9381e;">Safari:</strong>
-                        <ol style="margin-top: 0.5rem; padding-left: 1.5rem; color: #555;">
-                            <li>Go to Safari → Settings → Websites → Pop-up Windows</li>
-                            <li>Find this website and select "Allow"</li>
-                            <li>Try logging in again</li>
-                        </ol>
-                    </div>
-                </div>
-                
-                <button class="uk-button uk-button-primary uk-modal-close" 
-                        style="background: linear-gradient(135deg, #d9381e 0%, #b82f18 100%); 
-                               color: white; border: none; padding: 12px 30px; 
-                               border-radius: 8px; font-weight: 700; font-size: 1rem;">
-                    Got It, I'll Allow Popups
-                </button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Listen for messages from the popup window (postMessage API)
-        window.addEventListener('message', function(event) {
-            // Check if the message is LOGIN_SUCCESS from the popup
-            if (event.data === 'LOGIN_SUCCESS') {
-                // Redirect parent window to admin page
-                window.location.href = 'admin';
-            }
-        });
-        
-        // Function to open login in popup window
-        function openLoginPopup() {
-            const width = 600;
-            const height = 700;
-            const left = (screen.width / 2) - (width / 2);
-            const top = (screen.height / 2) - (height / 2);
+        // Auto-Login Feature: Automatically redirect to login unless user explicitly logged out
+        (function() {
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasLogoutParam = urlParams.has('logout');
+            const hasSessionParam = urlParams.has('session');
             
-            const popup = window.open(
-                'login',
-                'GenesysLogin',
-                `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,location=no,status=no`
-            );
-            
-            // Check if popup was blocked
-            if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-                // Show UIkit modal with instructions
-                UIkit.modal('#popup-blocked-modal').show();
+            // If logout=true OR session=expired is present, user should see the login page
+            // Otherwise, auto-login (redirect to login servlet)
+            if (!hasLogoutParam && !hasSessionParam) {
+                console.log('Auto-login: No logout/session parameter detected, initiating automatic login...');
+                
+                // Show loading overlay
+                const overlay = document.getElementById('autoLoginOverlay');
+                if (overlay) {
+                    overlay.classList.remove('hidden');
+                }
+                
+                // Small delay for better UX (show the loading animation briefly)
+                setTimeout(function() {
+                    console.log('Auto-login: Redirecting to login servlet...');
+                    window.location.href = 'login';
+                }, 500);
             } else {
-                popup.focus();
+                console.log('Auto-login: Explicit logout or session expiry detected, showing login page');
+                // User explicitly logged out or session expired, show the login page normally
             }
-        }
+        })();
         
         // Add page load animation
         document.addEventListener('DOMContentLoaded', function() {
