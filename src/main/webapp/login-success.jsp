@@ -109,13 +109,15 @@
     <script>
         // Check if this window was opened as a popup
         if (window.opener && !window.opener.closed) {
-            // Popup scenario - redirect parent and close popup
+            // Popup scenario - use postMessage to signal parent window
             setTimeout(function() {
                 try {
-                    window.opener.location.href = '<%= request.getContextPath() %>/admin';
+                    // Send message to parent window (safe for cross-origin)
+                    window.opener.postMessage('LOGIN_SUCCESS', '*');
+                    // Close the popup immediately after sending message
                     window.close();
                 } catch (e) {
-                    console.error('Error redirecting parent window:', e);
+                    console.error('Error sending message to parent window:', e);
                     // Fallback: redirect this window
                     window.location.href = '<%= request.getContextPath() %>/admin';
                 }

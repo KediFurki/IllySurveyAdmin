@@ -501,6 +501,15 @@
     </div>
 
     <script>
+        // Listen for messages from the popup window (postMessage API)
+        window.addEventListener('message', function(event) {
+            // Check if the message is LOGIN_SUCCESS from the popup
+            if (event.data === 'LOGIN_SUCCESS') {
+                // Redirect parent window to admin page
+                window.location.href = 'admin';
+            }
+        });
+        
         // Function to open login in popup window
         function openLoginPopup() {
             const width = 600;
