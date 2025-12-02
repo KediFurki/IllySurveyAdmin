@@ -1339,7 +1339,7 @@
                                 <button type="button" class="btn-reset" onclick="resetFilters()" title="Reset filters">
                                     <span uk-icon="icon: refresh; ratio: 0.9"></span>
                                 </button>
-                                <a href="admin?action=export&startDate=${startDate}&endDate=${endDate}&type=${param.type}&score=${param.score}&audio=${param.audio}" class="btn-export" uk-tooltip="title: Download CSV" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+                                <a href="admin?action=export&startDate=${startDate}&endDate=${endDate}&type=${param.type}&score=${param.score}&audio=${param.audio}" class="btn-export" target="_blank" uk-tooltip="title: Download CSV" style="flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;">
                                     <span uk-icon="icon: download; ratio: 0.9"></span>
                                 </a>
                             </div>
