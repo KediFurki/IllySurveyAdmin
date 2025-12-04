@@ -20,9 +20,9 @@ public class SurveyDAO {
         "attr_a.value AS hasAudio " +
         "FROM public.conversations c " +
         "INNER JOIN public.participants p ON c.conversationid = p.conversationid " +
-        "LEFT JOIN public.attributes attr_t ON p.participantid = attr_t.participantid AND attr_t.key = 'SurveyType' " +
-        "LEFT JOIN public.attributes attr_s1 ON p.participantid = attr_s1.participantid AND attr_s1.key = 'SurveyScoreQ1' " +
-        "LEFT JOIN public.attributes attr_s2 ON p.participantid = attr_s2.participantid AND attr_s2.key = 'SurveyScoreQ2' " +
+        "LEFT JOIN public.attributes attr_t ON p.participantid = attr_t.participantid AND attr_t.key = 'clientType' " +
+        "LEFT JOIN public.attributes attr_s1 ON p.participantid = attr_s1.participantid AND attr_s1.key = 'ServiceQuality' " +
+        "LEFT JOIN public.attributes attr_s2 ON p.participantid = attr_s2.participantid AND attr_s2.key = 'RecommendScore' " +
         "LEFT JOIN public.attributes attr_a ON p.participantid = attr_a.participantid AND attr_a.key = 'HasAudioFeedback' " +
         "WHERE p.partecipanttype = 'customer' " +
         "AND c.conversationstart >= ? AND c.conversationstart <= ? " +

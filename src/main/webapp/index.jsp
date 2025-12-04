@@ -1182,6 +1182,258 @@
                 width: 80px;
             }
         }
+
+        /* ============ DataTable Editor ============ */
+        .datatable-question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .datatable-question-card:hover {
+            box-shadow: 0 8px 24px rgba(217, 56, 30, 0.15);
+            border-color: rgba(217, 56, 30, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .datatable-question-card.saving {
+            border-color: #ff9800;
+            background: #fff8f0;
+        }
+
+        .datatable-question-card.success {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+
+        .datatable-question-card.error {
+            border-color: #e53935;
+            background: #fef5f5;
+        }
+
+        .question-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .question-card-key {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--illy-red);
+            font-size: 0.85rem;
+            background: rgba(217, 56, 30, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .question-card-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .question-card-status.idle {
+            color: #999;
+        }
+
+        .question-card-status.saving {
+            color: #ff9800;
+        }
+
+        .question-card-status.success {
+            color: #4caf50;
+        }
+
+        .question-card-status.error {
+            color: #e53935;
+        }
+
+        .question-card-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-card-textarea {
+            width: 100%;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .question-card-textarea:focus {
+            outline: none;
+            border-color: var(--illy-red);
+            box-shadow: 0 0 0 4px rgba(217, 56, 30, 0.1);
+            background: #fff;
+        }
+
+        .question-card-textarea:disabled {
+            background: #f5f5f5;
+            cursor: not-allowed;
+        }
+
+        .question-card-footer {
+            margin-top: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #999;
+        }
+
+        .save-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--illy-red), var(--illy-dark-red));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .datatable-question-card.saving .save-indicator {
+            transform: scaleX(1);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        #datatable-grid {
+            max-height: 600px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        #datatable-grid::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        #datatable-grid::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #datatable-grid::-webkit-scrollbar-thumb {
+            background: var(--illy-red);
+            border-radius: 10px;
+        }
+
+        #datatable-grid::-webkit-scrollbar-thumb:hover {
+            background: var(--illy-dark-red);
+        }
+
+        /* Old table styles - keep for backward compatibility */
+        #datatable-table {
+            margin-top: 1rem;
+        }
+
+        #datatable-table thead {
+            background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%);
+            color: white;
+        }
+
+        #datatable-table thead th {
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            padding: 1rem;
+        }
+
+        #datatable-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        #datatable-table tbody tr:hover {
+            background: rgba(217, 56, 30, 0.05);
+        }
+
+        #datatable-table .uk-input {
+            font-size: 0.95rem;
+            padding: 0.75rem;
+        }
+
+        #datatable-table .uk-input:focus {
+            border-color: var(--illy-red);
+            box-shadow: 0 0 0 3px rgba(217, 56, 30, 0.1);
+        }
+
+        .status-icon {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        #datatable-container::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        #datatable-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        #datatable-container::-webkit-scrollbar-thumb {
+            background: var(--illy-red);
+            border-radius: 4px;
+        }
+
+        #datatable-container::-webkit-scrollbar-thumb:hover {
+            background: var(--illy-dark-red);
+        }
+
+        /* Navbar Manage Questions Button */
+        .navbar-manage-btn {
+            background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(217, 56, 30, 0.3);
+            transition: all 0.3s ease;
+            color: white;
+            cursor: pointer;
+        }
+
+        .navbar-manage-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(217, 56, 30, 0.4);
+            background: linear-gradient(135deg, var(--illy-dark-red) 0%, #9a2612 100%);
+        }
+
+        .navbar-manage-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(217, 56, 30, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -1192,6 +1444,13 @@
             <a class="uk-navbar-item uk-logo" href="admin" style="color: var(--illy-red); text-decoration: none;">
                 <span uk-icon="icon: settings; ratio: 1.2" style="color: var(--illy-red);"></span> &nbsp; <span class="uk-hidden-small" style="color: var(--illy-red);">illy Survey Admin</span>
             </a>
+        </div>
+        <div class="uk-navbar-center">
+            <button type="button" class="uk-button uk-button-primary navbar-manage-btn" onclick="openDataTableEditor()">
+                <span uk-icon="icon: database; ratio: 0.9"></span> 
+                <span class="uk-visible-large">Manage Survey Questions</span>
+                <span class="uk-hidden-large">Questions</span>
+            </button>
         </div>
         <div class="uk-navbar-right">
             <div class="user-section">
@@ -1554,6 +1813,70 @@
         </div>
     </div>
 
+    <!-- DataTable Editor Modal -->
+    <div id="datatable-modal" uk-modal>
+        <div class="uk-modal-dialog" style="width: 95%; max-width: 1400px; border-radius: 16px; overflow: hidden;">
+            <button class="uk-modal-close-default" type="button" uk-close></button>
+            
+            <!-- Modal Header -->
+            <div style="background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%); 
+                        padding: 2rem; 
+                        color: white;">
+                <h2 style="margin: 0; font-size: 1.8rem; font-weight: 700; display: flex; align-items: center; gap: 1rem;">
+                    <span uk-icon="icon: database; ratio: 2"></span> 
+                    <span>Survey Questions Manager</span>
+                </h2>
+                <p style="margin: 0.5rem 0 0 0; opacity: 0.9; font-size: 1rem;">
+                    Edit your Genesys DataTable survey questions in real-time. Changes save automatically.
+                </p>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="uk-modal-body" style="padding: 2rem; background: #f8f9fa;">
+                
+                <!-- Loading State -->
+                <div id="datatable-loading" style="text-align: center; padding: 4rem; display: none;">
+                    <div uk-spinner="ratio: 3" style="color: var(--illy-red);"></div>
+                    <p style="margin-top: 1.5rem; color: #666; font-size: 1.1rem; font-weight: 600;">Loading questions from Genesys Cloud...</p>
+                </div>
+
+                <!-- Error State -->
+                <div id="datatable-error" style="display: none; padding: 1.5rem; background: #fff; border-left: 6px solid #e53935; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <p style="margin: 0; color: #e53935; font-weight: 600; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span uk-icon="icon: warning; ratio: 1.5"></span> 
+                        <span id="datatable-error-message">Error loading data</span>
+                    </p>
+                </div>
+
+                <!-- Success Message -->
+                <div id="datatable-success" style="display: none; padding: 1rem; background: #fff; border-left: 6px solid #4caf50; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <p style="margin: 0; color: #4caf50; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        <span uk-icon="icon: check; ratio: 1.2"></span> 
+                        <span>Questions loaded successfully!</span>
+                    </p>
+                </div>
+
+                <!-- Questions Grid -->
+                <div id="datatable-container" style="display: none;">
+                    <div id="datatable-grid" class="uk-grid-small uk-child-width-1-1 uk-child-width-1-2@m uk-child-width-1-3@xl" uk-grid>
+                        <!-- Question cards will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div style="padding: 1.5rem 2rem; background: #fff; border-top: 2px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center;">
+                <div style="color: #666; font-size: 0.9rem;">
+                    <span uk-icon="icon: info; ratio: 0.8"></span> 
+                    <span id="datatable-count">0 questions</span>
+                </div>
+                <button class="uk-button uk-button-default uk-modal-close" style="padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="illy-footer">
         <div>© 2025 Illy Survey Admin - All rights reserved</div>
         <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #bbb;">
@@ -1731,6 +2054,247 @@
             audioCurrentTime.textContent = '0:00';
             audioDuration.textContent = '0:00';
             UIkit.modal(document.getElementById('audio-modal')).show();
+        }
+
+        // ============ DataTable Editor Functions ============
+        
+        // Open DataTable Editor
+        function openDataTableEditor() {
+            const modal = document.getElementById('datatable-modal');
+            const loading = document.getElementById('datatable-loading');
+            const errorDiv = document.getElementById('datatable-error');
+            const successDiv = document.getElementById('datatable-success');
+            const container = document.getElementById('datatable-container');
+            
+            // Show loading, hide error and content
+            loading.style.display = 'block';
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            container.style.display = 'none';
+            
+            // Open modal
+            UIkit.modal(modal).show();
+            
+            // Fetch data
+            fetch('api/datatable')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch data: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    loading.style.display = 'none';
+                    successDiv.style.display = 'block';
+                    container.style.display = 'block';
+                    
+                    // Hide success message after 2 seconds
+                    setTimeout(() => {
+                        successDiv.style.display = 'none';
+                    }, 2000);
+                    
+                    renderDataTable(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching DataTable:', error);
+                    loading.style.display = 'none';
+                    errorDiv.style.display = 'block';
+                    document.getElementById('datatable-error-message').textContent = error.message;
+                });
+        }
+        
+        // Render DataTable as cards
+        function renderDataTable(data) {
+            const grid = document.getElementById('datatable-grid');
+            const countDiv = document.getElementById('datatable-count');
+            grid.innerHTML = '';
+            
+            if (!data.entities || data.entities.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #999;"><div uk-icon="icon: info; ratio: 3" style="margin-bottom: 1rem;"></div><p style="font-size: 1.2rem; font-weight: 600;">No questions found</p></div>';
+                countDiv.textContent = '0 questions';
+                return;
+            }
+            
+            countDiv.textContent = data.entities.length + ' question' + (data.entities.length > 1 ? 's' : '');
+            
+            data.entities.forEach((row, index) => {
+                const cardDiv = document.createElement('div');
+                
+                const card = document.createElement('div');
+                card.className = 'datatable-question-card';
+                card.id = 'card-' + row.key;
+                
+                // Save indicator bar
+                const saveIndicator = document.createElement('div');
+                saveIndicator.className = 'save-indicator';
+                card.appendChild(saveIndicator);
+                
+                // Card header
+                const header = document.createElement('div');
+                header.className = 'question-card-header';
+                
+                const keyBadge = document.createElement('div');
+                keyBadge.className = 'question-card-key';
+                keyBadge.textContent = row.key || 'Q' + (index + 1);
+                
+                const status = document.createElement('div');
+                status.className = 'question-card-status idle';
+                status.id = 'status-' + row.key;
+                status.innerHTML = '<span uk-icon="icon: circle; ratio: 0.6"></span><span>Ready</span>';
+                
+                header.appendChild(keyBadge);
+                header.appendChild(status);
+                card.appendChild(header);
+                
+                // Question label
+                const label = document.createElement('label');
+                label.className = 'question-card-label';
+                label.textContent = 'Question Text';
+                card.appendChild(label);
+                
+                // Textarea for editing
+                const textarea = document.createElement('textarea');
+                textarea.className = 'question-card-textarea';
+                textarea.value = getRowValue(row);
+                textarea.dataset.key = row.key;
+                textarea.dataset.originalValue = textarea.value;
+                textarea.placeholder = 'Enter your survey question here...';
+                
+                // Add event listeners for auto-save
+                let saveTimeout;
+                textarea.addEventListener('input', function() {
+                    clearTimeout(saveTimeout);
+                    saveTimeout = setTimeout(() => {
+                        if (this.value !== this.dataset.originalValue) {
+                            saveRow(row.key, this, row);
+                        }
+                    }, 1000); // Auto-save 1 second after typing stops
+                });
+                
+                textarea.addEventListener('blur', function() {
+                    if (this.value !== this.dataset.originalValue) {
+                        clearTimeout(saveTimeout);
+                        saveRow(row.key, this, row);
+                    }
+                });
+                
+                card.appendChild(textarea);
+                
+                // Card footer
+                const footer = document.createElement('div');
+                footer.className = 'question-card-footer';
+                footer.innerHTML = '<span><span uk-icon="icon: info; ratio: 0.7"></span> Changes save automatically</span>';
+                card.appendChild(footer);
+                
+                cardDiv.appendChild(card);
+                grid.appendChild(cardDiv);
+            });
+        }
+        
+        // Get value from row (handles different field names)
+        function getRowValue(row) {
+            // Try common field names - check all possible fields
+            if (row.value !== undefined && row.value !== null) return row.value;
+            if (row.prompt !== undefined && row.prompt !== null) return row.prompt;
+            if (row.question !== undefined && row.question !== null) return row.question;
+            if (row.text !== undefined && row.text !== null) return row.text;
+            if (row.description !== undefined && row.description !== null) return row.description;
+            
+            // If none found, return first non-key property value
+            for (let key in row) {
+                if (key !== 'key' && typeof row[key] === 'string' && row[key].length > 0) {
+                    return row[key];
+                }
+            }
+            
+            return '';
+        }
+        
+        // Save row data
+        function saveRow(key, textareaElement, originalRow) {
+            const card = document.getElementById('card-' + key);
+            const statusDiv = document.getElementById('status-' + key);
+            
+            // Show saving status
+            card.classList.remove('success', 'error');
+            card.classList.add('saving');
+            statusDiv.className = 'question-card-status saving';
+            statusDiv.innerHTML = '<div uk-spinner="ratio: 0.6"></div><span>Saving...</span>';
+            textareaElement.disabled = true;
+            
+            // Build update payload - preserve ALL original fields and update the value
+            const updatePayload = { ...originalRow };
+            updatePayload.key = key;
+            
+            // Update all possible text fields with new value
+            const newValue = textareaElement.value;
+            if ('value' in originalRow) updatePayload.value = newValue;
+            if ('prompt' in originalRow) updatePayload.prompt = newValue;
+            if ('question' in originalRow) updatePayload.question = newValue;
+            if ('text' in originalRow) updatePayload.text = newValue;
+            if ('description' in originalRow) updatePayload.description = newValue;
+            
+            // If no text field existed, use 'value' as default
+            if (!('value' in originalRow) && !('prompt' in originalRow) && !('question' in originalRow) && !('text' in originalRow)) {
+                updatePayload.value = newValue;
+            }
+            
+            console.log('Saving row:', key, updatePayload);
+            
+            fetch('api/datatable', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatePayload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error('Server returned ' + response.status + ': ' + text);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Success
+                card.classList.remove('saving');
+                card.classList.add('success');
+                statusDiv.className = 'question-card-status success';
+                statusDiv.innerHTML = '<span uk-icon="icon: check; ratio: 0.8"></span><span>Saved!</span>';
+                textareaElement.dataset.originalValue = textareaElement.value;
+                
+                // Reset to idle after 2 seconds
+                setTimeout(() => {
+                    card.classList.remove('success');
+                    statusDiv.className = 'question-card-status idle';
+                    statusDiv.innerHTML = '<span uk-icon="icon: circle; ratio: 0.6"></span><span>Ready</span>';
+                    textareaElement.disabled = false;
+                }, 2000);
+            })
+            .catch(error => {
+                console.error('Error saving row:', error);
+                card.classList.remove('saving');
+                card.classList.add('error');
+                statusDiv.className = 'question-card-status error';
+                statusDiv.innerHTML = '<span uk-icon="icon: warning; ratio: 0.8"></span><span>Error</span>';
+                textareaElement.disabled = false;
+                
+                // Show error notification
+                UIkit.notification({
+                    message: '<span uk-icon="icon: warning"></span> Failed to save: ' + error.message,
+                    status: 'danger',
+                    pos: 'top-right',
+                    timeout: 5000
+                });
+                
+                // Reset to idle after 3 seconds
+                setTimeout(() => {
+                    card.classList.remove('error');
+                    statusDiv.className = 'question-card-status idle';
+                    statusDiv.innerHTML = '<span uk-icon="icon: circle; ratio: 0.6"></span><span>Ready</span>';
+                }, 3000);
+            });
         }
 
         // Initialize on page load

@@ -22,6 +22,10 @@ public class GenesysConfig {
         return getProperty("genesys.redirect.uri", "https://locahost:8443/IllySurveyAdmin/oauth/callback");
     }
 
+    public static String getDataTableId() {
+        return getProperty("genesys.datatable.id", null);
+    }
+
     // Helper method: retrieves data from ConfigServlet
     private static String getProperty(String key, String defaultValue) {
         Properties props = ConfigServlet.getProperties();
