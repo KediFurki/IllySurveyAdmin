@@ -1186,9 +1186,9 @@
         /* ============ DataTable Editor ============ */
         .datatable-question-card {
             background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.05);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid transparent;
             position: relative;
@@ -1196,44 +1196,45 @@
         }
 
         .datatable-question-card:hover {
-            box-shadow: 0 8px 24px rgba(217, 56, 30, 0.15);
-            border-color: rgba(217, 56, 30, 0.2);
-            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(217, 56, 30, 0.12), 0 0 0 1px rgba(217, 56, 30, 0.1);
+            border-color: rgba(217, 56, 30, 0.15);
+            transform: translateY(-4px);
         }
 
         .datatable-question-card.saving {
             border-color: #ff9800;
-            background: #fff8f0;
+            background: linear-gradient(to bottom, #fff8f0 0%, white 100%);
         }
 
         .datatable-question-card.success {
             border-color: #4caf50;
-            background: #f1f8f4;
+            background: linear-gradient(to bottom, #f1f8f4 0%, white 100%);
         }
 
         .datatable-question-card.error {
             border-color: #e53935;
-            background: #fef5f5;
+            background: linear-gradient(to bottom, #fef5f5 0%, white 100%);
         }
 
         .question-card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid #f0f0f0;
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+            border-bottom: 2px solid #e8e8e8;
         }
 
         .question-card-key {
             font-family: 'Courier New', monospace;
             font-weight: 700;
-            color: var(--illy-red);
-            font-size: 0.85rem;
-            background: rgba(217, 56, 30, 0.1);
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+            background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
             letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(217, 56, 30, 0.25);
         }
 
         .question-card-status {
@@ -1260,48 +1261,100 @@
             color: #e53935;
         }
 
+        .question-card-body {
+            padding: 1.5rem;
+        }
+
         .question-card-label {
             display: block;
             font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #666;
-            margin-bottom: 0.5rem;
+            letter-spacing: 0.8px;
+            color: #888;
+            margin-bottom: 0.75rem;
         }
 
         .question-card-textarea {
             width: 100%;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 1rem;
             font-size: 1rem;
-            line-height: 1.6;
+            line-height: 1.7;
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px;
             transition: all 0.3s ease;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fafafa;
         }
 
         .question-card-textarea:focus {
             outline: none;
             border-color: var(--illy-red);
-            box-shadow: 0 0 0 4px rgba(217, 56, 30, 0.1);
+            box-shadow: 0 0 0 4px rgba(217, 56, 30, 0.08);
             background: #fff;
         }
 
         .question-card-textarea:disabled {
             background: #f5f5f5;
             cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .question-card-footer {
-            margin-top: 0.75rem;
+            padding: 1rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: #fafafa;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .question-card-info {
             font-size: 0.8rem;
             color: #999;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .question-card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-delete-question {
+            background: transparent;
+            border: 2px solid #e53935;
+            color: #e53935;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            min-width: auto;
+        }
+
+        .btn-delete-question:hover {
+            background: #e53935;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+        }
+
+        .btn-delete-question:active {
+            transform: translateY(0);
+        }
+
+        .btn-delete-question span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .save-indicator {
@@ -1327,13 +1380,13 @@
         }
 
         #datatable-grid {
-            max-height: 600px;
+            max-height: 650px;
             overflow-y: auto;
-            padding: 0.5rem;
+            padding: 1rem;
         }
 
         #datatable-grid::-webkit-scrollbar {
-            width: 10px;
+            width: 12px;
         }
 
         #datatable-grid::-webkit-scrollbar-track {
@@ -1342,12 +1395,191 @@
         }
 
         #datatable-grid::-webkit-scrollbar-thumb {
-            background: var(--illy-red);
+            background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%);
             border-radius: 10px;
         }
 
         #datatable-grid::-webkit-scrollbar-thumb:hover {
-            background: var(--illy-dark-red);
+            background: linear-gradient(135deg, var(--illy-dark-red) 0%, #9a2612 100%);
+        }
+
+        /* Add New Question Button */
+        .btn-add-question {
+            background: linear-gradient(135deg, var(--success-green) 0%, var(--success-dark) 100%);
+            border: none;
+            color: white;
+            padding: 0.85rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(50, 210, 150, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .btn-add-question:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(50, 210, 150, 0.4);
+            background: linear-gradient(135deg, var(--success-dark) 0%, #1a9966 100%);
+        }
+
+        .btn-add-question:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(50, 210, 150, 0.3);
+        }
+
+        /* Modal Header Enhancement */
+        .datatable-modal-header {
+            background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%);
+            padding: 2rem;
+            color: white;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .datatable-modal-title {
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* ============ UIkit Dialog Customization ============ */
+        /* Prompt and Confirm dialogs */
+        .uk-modal-dialog.uk-modal-body {
+            border-radius: 16px !important;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25) !important;
+        }
+
+        /* Modal title styling */
+        .uk-modal-title {
+            color: var(--illy-red) !important;
+            font-weight: 700 !important;
+            font-size: 1.5rem !important;
+        }
+
+        /* Prompt input styling */
+        .uk-modal-body .uk-input {
+            border: 2px solid #e0e0e0 !important;
+            border-radius: 10px !important;
+            padding: 0.85rem 1rem !important;
+            font-size: 1rem !important;
+            transition: all 0.3s ease !important;
+            background: #fafafa !important;
+        }
+
+        .uk-modal-body .uk-input:focus {
+            border-color: var(--illy-red) !important;
+            box-shadow: 0 0 0 4px rgba(217, 56, 30, 0.1) !important;
+            background: #fff !important;
+            outline: none !important;
+        }
+
+        /* Modal buttons container */
+        .uk-modal-footer {
+            background: #f8f9fa !important;
+            border-top: 2px solid #e8e8e8 !important;
+            padding: 1.25rem 1.5rem !important;
+            border-radius: 0 0 16px 16px !important;
+        }
+
+        /* Primary button (OK/Delete) */
+        .uk-modal-body .uk-button-primary,
+        .uk-modal-footer .uk-button-primary {
+            background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%) !important;
+            border: none !important;
+            border-radius: 10px !important;
+            padding: 0.75rem 1.75rem !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 12px rgba(217, 56, 30, 0.3) !important;
+            text-transform: none !important;
+        }
+
+        .uk-modal-body .uk-button-primary:hover,
+        .uk-modal-footer .uk-button-primary:hover {
+            background: linear-gradient(135deg, var(--illy-dark-red) 0%, #9a2612 100%) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(217, 56, 30, 0.4) !important;
+        }
+
+        /* Default/Cancel button */
+        .uk-modal-body .uk-button-default,
+        .uk-modal-footer .uk-button-default {
+            background: #fff !important;
+            border: 2px solid #e0e0e0 !important;
+            border-radius: 10px !important;
+            padding: 0.75rem 1.75rem !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+            color: #666 !important;
+            transition: all 0.3s ease !important;
+            text-transform: none !important;
+        }
+
+        .uk-modal-body .uk-button-default:hover,
+        .uk-modal-footer .uk-button-default:hover {
+            background: #f5f5f5 !important;
+            border-color: #ccc !important;
+            color: #333 !important;
+        }
+
+        /* Confirm dialog specific - text styling */
+        .uk-modal-body p {
+            font-size: 1.05rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Form label in prompt */
+        .uk-modal-body .uk-form-label {
+            font-weight: 600 !important;
+            color: #444 !important;
+            font-size: 0.9rem !important;
+            margin-bottom: 0.5rem !important;
+            display: block;
+        }
+
+        /* Close button */
+        .uk-modal-close-default {
+            color: #999 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .uk-modal-close-default:hover {
+            color: var(--illy-red) !important;
+        }
+
+        /* Backdrop */
+        .uk-modal {
+            background: rgba(0, 0, 0, 0.6) !important;
+        }
+
+        /* Custom Add Question Modal Styles */
+        #add-question-modal .uk-input:focus,
+        #add-question-modal .uk-textarea:focus {
+            border-color: var(--illy-red) !important;
+            box-shadow: 0 0 0 4px rgba(217, 56, 30, 0.1) !important;
+            background: #fff !important;
+            outline: none !important;
+        }
+
+        #add-question-modal button:hover,
+        #delete-confirm-modal button:hover {
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        #add-question-modal button:active,
+        #delete-confirm-modal button:active {
+            transform: translateY(0);
         }
 
         /* Old table styles - keep for backward compatibility */
@@ -1449,7 +1681,6 @@
             <button type="button" class="uk-button uk-button-primary navbar-manage-btn" onclick="openDataTableEditor()">
                 <span uk-icon="icon: database; ratio: 0.9"></span> 
                 <span class="uk-visible-large">Manage Survey Questions</span>
-                <span class="uk-hidden-large">Questions</span>
             </button>
         </div>
         <div class="uk-navbar-right">
@@ -1856,6 +2087,14 @@
                     </p>
                 </div>
 
+                <!-- Add New Question Button -->
+                <div id="add-question-container" style="display: none; text-align: center; margin-bottom: 1.5rem;">
+                    <button type="button" class="btn-add-question" onclick="showAddQuestionDialog()">
+                        <span uk-icon="icon: plus-circle; ratio: 1.2"></span>
+                        <span>Add New Question</span>
+                    </button>
+                </div>
+
                 <!-- Questions Grid -->
                 <div id="datatable-container" style="display: none;">
                     <div id="datatable-grid" class="uk-grid-small uk-child-width-1-1 uk-child-width-1-2@m uk-child-width-1-3@xl" uk-grid>
@@ -1872,6 +2111,105 @@
                 </div>
                 <button class="uk-button uk-button-default uk-modal-close" style="padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600;">
                     Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Question Modal (Custom Themed) -->
+    <div id="add-question-modal" uk-modal>
+        <div class="uk-modal-dialog" style="width: 500px; max-width: 95%; border-radius: 16px; overflow: hidden;">
+            <!-- Modal Header -->
+            <div style="background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%); padding: 1.5rem 2rem; color: white;">
+                <button class="uk-modal-close-default" type="button" uk-close style="color: white;"></button>
+                <h2 style="margin: 0; font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem;">
+                    <span uk-icon="icon: plus-circle; ratio: 1.3"></span>
+                    <span>Add New Question</span>
+                </h2>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="uk-modal-body" style="padding: 2rem; background: #fff;">
+                <form id="add-question-form" onsubmit="submitNewQuestion(event)">
+                    <!-- Question Key -->
+                    <div class="uk-margin">
+                        <label class="uk-form-label" style="font-weight: 600; color: #444; font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">
+                            <span uk-icon="icon: tag; ratio: 0.8"></span> Question Key
+                        </label>
+                        <input class="uk-input" type="text" id="new-question-key" placeholder="e.g., Q1, Q2, NPS_Question" 
+                               style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 0.85rem 1rem; font-size: 1rem; background: #fafafa;"
+                               required>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: #888;">
+                            Unique identifier for this question (no spaces recommended)
+                        </p>
+                    </div>
+                    
+                    <!-- Question Text -->
+                    <div class="uk-margin">
+                        <label class="uk-form-label" style="font-weight: 600; color: #444; font-size: 0.9rem; margin-bottom: 0.5rem; display: block;">
+                            <span uk-icon="icon: comment; ratio: 0.8"></span> Question Text
+                        </label>
+                        <textarea class="uk-textarea" id="new-question-text" rows="4" placeholder="Enter your survey question here..."
+                                  style="border: 2px solid #e0e0e0; border-radius: 10px; padding: 0.85rem 1rem; font-size: 1rem; background: #fafafa; resize: vertical;"
+                                  required></textarea>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: #888;">
+                            The question that will be presented to survey participants
+                        </p>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div style="padding: 1.25rem 2rem; background: #f8f9fa; border-top: 2px solid #e8e8e8; display: flex; justify-content: flex-end; gap: 1rem;">
+                <button class="uk-button uk-modal-close" type="button" 
+                        style="background: #fff; border: 2px solid #e0e0e0; border-radius: 10px; padding: 0.75rem 1.5rem; font-weight: 600; color: #666;">
+                    Cancel
+                </button>
+                <button class="uk-button" type="button" onclick="submitNewQuestion()"
+                        style="background: linear-gradient(135deg, var(--illy-red) 0%, var(--illy-dark-red) 100%); border: none; border-radius: 10px; padding: 0.75rem 1.5rem; font-weight: 600; color: white; box-shadow: 0 4px 12px rgba(217, 56, 30, 0.3);">
+                    <span uk-icon="icon: check; ratio: 0.9"></span> Create Question
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal (Custom Themed) -->
+    <div id="delete-confirm-modal" uk-modal>
+        <div class="uk-modal-dialog" style="width: 450px; max-width: 95%; border-radius: 16px; overflow: hidden;">
+            <!-- Modal Header -->
+            <div style="background: linear-gradient(135deg, #e53935 0%, #c62828 100%); padding: 1.5rem 2rem; color: white;">
+                <button class="uk-modal-close-default" type="button" uk-close style="color: white;"></button>
+                <h2 style="margin: 0; font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem;">
+                    <span uk-icon="icon: warning; ratio: 1.3"></span>
+                    <span>Delete Question</span>
+                </h2>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="uk-modal-body" style="padding: 2rem; background: #fff; text-align: center;">
+                <div style="width: 80px; height: 80px; background: #fef5f5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem;">
+                    <span uk-icon="icon: trash; ratio: 2.5" style="color: #e53935;"></span>
+                </div>
+                <p style="font-size: 1.1rem; color: #333; margin: 0 0 0.5rem 0; font-weight: 600;">
+                    Are you sure you want to delete this question?
+                </p>
+                <p style="font-size: 0.95rem; color: #666; margin: 0;">
+                    Question: <strong id="delete-question-key" style="color: var(--illy-red);"></strong>
+                </p>
+                <p style="font-size: 0.85rem; color: #999; margin: 1rem 0 0 0;">
+                    This action cannot be undone.
+                </p>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div style="padding: 1.25rem 2rem; background: #f8f9fa; border-top: 2px solid #e8e8e8; display: flex; justify-content: center; gap: 1rem;">
+                <button class="uk-button uk-modal-close" type="button" 
+                        style="background: #fff; border: 2px solid #e0e0e0; border-radius: 10px; padding: 0.75rem 2rem; font-weight: 600; color: #666;">
+                    Cancel
+                </button>
+                <button class="uk-button" type="button" id="confirm-delete-btn"
+                        style="background: linear-gradient(135deg, #e53935 0%, #c62828 100%); border: none; border-radius: 10px; padding: 0.75rem 2rem; font-weight: 600; color: white; box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);">
+                    <span uk-icon="icon: trash; ratio: 0.9"></span> Delete
                 </button>
             </div>
         </div>
@@ -2107,13 +2445,18 @@
         function renderDataTable(data) {
             const grid = document.getElementById('datatable-grid');
             const countDiv = document.getElementById('datatable-count');
+            const addButtonContainer = document.getElementById('add-question-container');
             grid.innerHTML = '';
             
             if (!data.entities || data.entities.length === 0) {
                 grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #999;"><div uk-icon="icon: info; ratio: 3" style="margin-bottom: 1rem;"></div><p style="font-size: 1.2rem; font-weight: 600;">No questions found</p></div>';
                 countDiv.textContent = '0 questions';
+                if (addButtonContainer) addButtonContainer.style.display = 'block';
                 return;
             }
+            
+            // Show add button
+            if (addButtonContainer) addButtonContainer.style.display = 'block';
             
             countDiv.textContent = data.entities.length + ' question' + (data.entities.length > 1 ? 's' : '');
             
@@ -2122,7 +2465,9 @@
                 
                 const card = document.createElement('div');
                 card.className = 'datatable-question-card';
-                card.id = 'card-' + row.key;
+                card.id = 'card-' + index;
+                card.dataset.key = row.key; // Store key as data attribute
+                card.dataset.index = index;
                 
                 // Save indicator bar
                 const saveIndicator = document.createElement('div');
@@ -2139,24 +2484,28 @@
                 
                 const status = document.createElement('div');
                 status.className = 'question-card-status idle';
-                status.id = 'status-' + row.key;
+                status.id = 'status-' + index;
                 status.innerHTML = '<span uk-icon="icon: circle; ratio: 0.6"></span><span>Ready</span>';
                 
                 header.appendChild(keyBadge);
                 header.appendChild(status);
                 card.appendChild(header);
                 
-                // Question label
+                // Card body
+                const body = document.createElement('div');
+                body.className = 'question-card-body';
+                
                 const label = document.createElement('label');
                 label.className = 'question-card-label';
                 label.textContent = 'Question Text';
-                card.appendChild(label);
+                body.appendChild(label);
                 
                 // Textarea for editing
                 const textarea = document.createElement('textarea');
                 textarea.className = 'question-card-textarea';
                 textarea.value = getRowValue(row);
                 textarea.dataset.key = row.key;
+                textarea.dataset.index = index;
                 textarea.dataset.originalValue = textarea.value;
                 textarea.placeholder = 'Enter your survey question here...';
                 
@@ -2166,24 +2515,47 @@
                     clearTimeout(saveTimeout);
                     saveTimeout = setTimeout(() => {
                         if (this.value !== this.dataset.originalValue) {
-                            saveRow(row.key, this, row);
+                            saveRow(this.dataset.index, this.dataset.key, this, row);
                         }
                     }, 1000); // Auto-save 1 second after typing stops
                 });
                 
                 textarea.addEventListener('blur', function() {
-                    if (this.value !== this.dataset.originalValue) {
-                        clearTimeout(saveTimeout);
-                        saveRow(row.key, this, row);
+                    clearTimeout(saveTimeout); // Cancel any pending auto-save
+                    // Only save on blur if value actually changed AND no save is pending
+                    if (this.value !== this.dataset.originalValue && currentlySavingKey !== this.dataset.key) {
+                        saveRow(this.dataset.index, this.dataset.key, this, row);
                     }
                 });
                 
-                card.appendChild(textarea);
+                body.appendChild(textarea);
+                card.appendChild(body);
                 
                 // Card footer
                 const footer = document.createElement('div');
                 footer.className = 'question-card-footer';
-                footer.innerHTML = '<span><span uk-icon="icon: info; ratio: 0.7"></span> Changes save automatically</span>';
+                
+                const info = document.createElement('div');
+                info.className = 'question-card-info';
+                info.innerHTML = '<span uk-icon="icon: info; ratio: 0.7"></span><span>Auto-save enabled</span>';
+                
+                const actions = document.createElement('div');
+                actions.className = 'question-card-actions';
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn-delete-question';
+                deleteBtn.innerHTML = '<span uk-icon="icon: trash; ratio: 0.8"></span>';
+                deleteBtn.title = 'Delete this question';
+                deleteBtn.type = 'button';
+                deleteBtn.dataset.key = row.key;
+                deleteBtn.dataset.index = index;
+                deleteBtn.onclick = function() {
+                    deleteQuestion(this.dataset.index, this.dataset.key);
+                };
+                
+                actions.appendChild(deleteBtn);
+                footer.appendChild(info);
+                footer.appendChild(actions);
                 card.appendChild(footer);
                 
                 cardDiv.appendChild(card);
@@ -2193,7 +2565,9 @@
         
         // Get value from row (handles different field names)
         function getRowValue(row) {
-            // Try common field names - check all possible fields
+            // Try common field names - check all possible fields (Stringa is primary for Genesys)
+            if (row.Stringa !== undefined && row.Stringa !== null) return row.Stringa;
+            if (row.Prova !== undefined && row.Prova !== null) return row.Prova; // Support custom field
             if (row.value !== undefined && row.value !== null) return row.value;
             if (row.prompt !== undefined && row.prompt !== null) return row.prompt;
             if (row.question !== undefined && row.question !== null) return row.question;
@@ -2201,9 +2575,9 @@
             if (row.description !== undefined && row.description !== null) return row.description;
             
             // If none found, return first non-key property value
-            for (let key in row) {
-                if (key !== 'key' && typeof row[key] === 'string' && row[key].length > 0) {
-                    return row[key];
+            for (let k in row) {
+                if (k !== 'key' && typeof row[k] === 'string' && row[k].length > 0) {
+                    return row[k];
                 }
             }
             
@@ -2211,9 +2585,22 @@
         }
         
         // Save row data
-        function saveRow(key, textareaElement, originalRow) {
-            const card = document.getElementById('card-' + key);
-            const statusDiv = document.getElementById('status-' + key);
+        let currentlySavingKey = null; // Track which row is currently being saved
+        
+        function saveRow(index, key, textareaElement, originalRow) {
+            const card = document.getElementById('card-' + index);
+            const statusDiv = document.getElementById('status-' + index);
+            
+            if (!card || !statusDiv) {
+                console.error('Card or status element not found for index:', index);
+                return;
+            }
+            
+            // Prevent duplicate saves - if this key is already being saved, skip it
+            if (currentlySavingKey === key) {
+                console.warn('Row is already being saved (key=' + key + '), skipping duplicate save request');
+                return;
+            }
             
             // Show saving status
             card.classList.remove('success', 'error');
@@ -2222,26 +2609,24 @@
             statusDiv.innerHTML = '<div uk-spinner="ratio: 0.6"></div><span>Saving...</span>';
             textareaElement.disabled = true;
             
-            // Build update payload - preserve ALL original fields and update the value
-            const updatePayload = { ...originalRow };
-            updatePayload.key = key;
+            // Mark as currently saving
+            currentlySavingKey = key;
             
-            // Update all possible text fields with new value
-            const newValue = textareaElement.value;
-            if ('value' in originalRow) updatePayload.value = newValue;
-            if ('prompt' in originalRow) updatePayload.prompt = newValue;
-            if ('question' in originalRow) updatePayload.question = newValue;
-            if ('text' in originalRow) updatePayload.text = newValue;
-            if ('description' in originalRow) updatePayload.description = newValue;
+            // Build update payload
+            // For Genesys Data Table API:
+            // - "key" goes in body AND as query parameter (for safety)
+            // - "Stringa" field goes in body (the actual data)
+            const updatePayload = {
+                key: key,
+                Stringa: textareaElement.value
+            };
             
-            // If no text field existed, use 'value' as default
-            if (!('value' in originalRow) && !('prompt' in originalRow) && !('question' in originalRow) && !('text' in originalRow)) {
-                updatePayload.value = newValue;
-            }
+            console.log('Saving row with key:', key);
+            console.log('Original row object:', originalRow);
+            console.log('New value:', textareaElement.value);
+            console.log('Payload to send:', updatePayload);
             
-            console.log('Saving row:', key, updatePayload);
-            
-            fetch('api/datatable', {
+            fetch('api/datatable?key=' + encodeURIComponent(key), {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -2249,12 +2634,14 @@
                 body: JSON.stringify(updatePayload)
             })
             .then(response => {
+                console.log('Response status:', response.status);
                 if (!response.ok) {
                     return response.text().then(text => {
+                        console.error('Error response:', text);
                         throw new Error('Server returned ' + response.status + ': ' + text);
                     });
                 }
-                return response.json();
+                return response.json().catch(() => ({ success: true }));
             })
             .then(data => {
                 // Success
@@ -2270,6 +2657,7 @@
                     statusDiv.className = 'question-card-status idle';
                     statusDiv.innerHTML = '<span uk-icon="icon: circle; ratio: 0.6"></span><span>Ready</span>';
                     textareaElement.disabled = false;
+                    currentlySavingKey = null; // ✅ Clear the saving flag
                 }, 2000);
             })
             .catch(error => {
@@ -2279,6 +2667,7 @@
                 statusDiv.className = 'question-card-status error';
                 statusDiv.innerHTML = '<span uk-icon="icon: warning; ratio: 0.8"></span><span>Error</span>';
                 textareaElement.disabled = false;
+                currentlySavingKey = null; // ✅ Clear the saving flag on error too
                 
                 // Show error notification
                 UIkit.notification({
@@ -2294,6 +2683,285 @@
                     statusDiv.className = 'question-card-status idle';
                     statusDiv.innerHTML = '<span uk-icon="icon: circle; ratio: 0.6"></span><span>Ready</span>';
                 }, 3000);
+            });
+        }
+
+        // Delete question function
+        let deleteTargetKey = null;
+        let deleteTargetIndex = null;
+        
+        function deleteQuestion(index, key) {
+            console.log('Delete clicked - Index:', index, 'Key:', key);
+            deleteTargetKey = key;
+            deleteTargetIndex = index;
+            document.getElementById('delete-question-key').textContent = key;
+            UIkit.modal(document.getElementById('delete-confirm-modal')).show();
+        }
+        
+        // Confirm delete handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+            if (!confirmDeleteBtn) {
+                console.error('Delete button not found!');
+                return;
+            }
+            
+            confirmDeleteBtn.addEventListener('click', function() {
+                console.log('Confirm delete - Key:', deleteTargetKey, 'Index:', deleteTargetIndex);
+                
+                if (!deleteTargetKey) {
+                    console.error('No key to delete');
+                    return;
+                }
+                if (deleteTargetIndex === null) {
+                    console.error('No index to delete');
+                    return;
+                }
+                
+                const key = deleteTargetKey;
+                const index = deleteTargetIndex;
+                
+                // Hide modal
+                const deleteModal = document.getElementById('delete-confirm-modal');
+                if (deleteModal) {
+                    UIkit.modal(deleteModal).hide();
+                }
+                
+                UIkit.notification({
+                    message: '<span uk-icon="icon: clock"></span> Deleting question...',
+                    status: 'warning',
+                    pos: 'top-right',
+                    timeout: 2000
+                });
+                
+                console.log('Sending DELETE request for key:', key);
+                
+                fetch('api/datatable?key=' + encodeURIComponent(key), {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    console.log('Delete response status:', response.status);
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            console.error('Delete error response:', text);
+                            throw new Error('Server returned ' + response.status + ': ' + text);
+                        });
+                    }
+                    return { success: true };
+                })
+                .then(data => {
+                    console.log('Delete successful, removing card index:', index);
+                    
+                    // Find and remove card by index
+                    const card = document.getElementById('card-' + index);
+                    console.log('Card element found:', !!card);
+                    
+                    if (card) {
+                        // Fade out animation
+                        card.style.transition = 'all 0.3s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'scale(0.8)';
+                        
+                        // Remove after animation
+                        setTimeout(() => {
+                            console.log('Removing card from DOM');
+                            if (card.parentElement) {
+                                card.parentElement.remove();
+                                console.log('Card removed');
+                            }
+                            
+                            // Update count
+                            const currentCount = document.querySelectorAll('.datatable-question-card').length;
+                            const countDiv = document.getElementById('datatable-count');
+                            if (countDiv) {
+                                countDiv.textContent = currentCount + ' question' + (currentCount !== 1 ? 's' : '');
+                                console.log('Updated count to:', currentCount);
+                            }
+                        }, 300);
+                    } else {
+                        console.error('Card with index ' + index + ' not found in DOM');
+                    }
+                    
+                    UIkit.notification({
+                        message: '<span uk-icon="icon: check"></span> Question deleted successfully!',
+                        status: 'success',
+                        pos: 'top-right',
+                        timeout: 3000
+                    });
+                    
+                    deleteTargetKey = null;
+                    deleteTargetIndex = null;
+                })
+                .catch(error => {
+                    console.error('Delete error:', error);
+                    UIkit.notification({
+                        message: '<span uk-icon="icon: warning"></span> Failed to delete: ' + error.message,
+                        status: 'danger',
+                        pos: 'top-right',
+                        timeout: 5000
+                    });
+                    deleteTargetKey = null;
+                    deleteTargetIndex = null;
+                });
+            });
+        });
+
+        // Show add question dialog (custom modal)
+        function showAddQuestionDialog() {
+            // Clear form
+            document.getElementById('new-question-key').value = '';
+            document.getElementById('new-question-text').value = '';
+            
+            // Show modal
+            UIkit.modal(document.getElementById('add-question-modal')).show();
+            
+            // Focus on first input
+            setTimeout(() => {
+                document.getElementById('new-question-key').focus();
+            }, 100);
+        }
+        
+        // Submit new question
+        function submitNewQuestion(event) {
+            if (event) event.preventDefault();
+            
+            console.log('submitNewQuestion called');
+            
+            const keyInput = document.getElementById('new-question-key');
+            const textInput = document.getElementById('new-question-text');
+            
+            const key = keyInput.value.trim();
+            const questionText = textInput.value.trim();
+            
+            console.log('Form inputs - key:', key, 'text:', questionText);
+            
+            // Validate key
+            if (!key) {
+                console.warn('Key is empty');
+                UIkit.notification({
+                    message: '<span uk-icon="icon: warning"></span> Question key cannot be empty',
+                    status: 'warning',
+                    pos: 'top-right',
+                    timeout: 3000
+                });
+                keyInput.focus();
+                return;
+            }
+            
+            // Check if key already exists - search through all cards by data attribute
+            const existingCard = Array.from(document.querySelectorAll('.datatable-question-card')).find(card => card.dataset.key === key);
+            if (existingCard) {
+                console.warn('Key already exists:', key);
+                UIkit.notification({
+                    message: '<span uk-icon="icon: warning"></span> A question with this key already exists',
+                    status: 'warning',
+                    pos: 'top-right',
+                    timeout: 3000
+                });
+                keyInput.focus();
+                return;
+            }
+            
+            // Validate text
+            if (!questionText) {
+                console.warn('Question text is empty');
+                UIkit.notification({
+                    message: '<span uk-icon="icon: warning"></span> Question text cannot be empty',
+                    status: 'warning',
+                    pos: 'top-right',
+                    timeout: 3000
+                });
+                textInput.focus();
+                return;
+            }
+            
+            console.log('Validation passed - closing modal');
+            // Close modal
+            UIkit.modal(document.getElementById('add-question-modal')).hide();
+            
+            // Add the question
+            addNewQuestion(key, questionText);
+        }
+
+        // Add new question to Genesys
+        function addNewQuestion(key, questionText) {
+            console.log('addNewQuestion called with key:', key, 'text:', questionText);
+            
+            UIkit.notification({
+                message: '<span uk-icon="icon: clock"></span> Creating new question...',
+                status: 'primary',
+                pos: 'top-right',
+                timeout: 2000
+            });
+            
+            // Build payload according to Genesys schema
+            // The Genesys Data Table schema expects "key" and "Stringa" fields
+            const newQuestion = {
+                key: key,
+                Stringa: questionText
+            };
+            
+            console.log('Sending POST request with payload:', newQuestion);
+            console.log('Payload JSON:', JSON.stringify(newQuestion));
+            
+            fetch('api/datatable', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newQuestion)
+            })
+            .then(response => {
+                console.log('POST Response received - Status:', response.status);
+                console.log('Response type:', typeof response);
+                console.log('Response ok:', response.ok);
+                
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        console.error('Error response status:', response.status);
+                        console.error('Error response text:', text);
+                        throw new Error('Server returned ' + response.status + ': ' + text);
+                    });
+                }
+                
+                // Try to parse as JSON, fallback to text
+                try {
+                    return response.json();
+                } catch (e) {
+                    console.warn('Could not parse response as JSON:', e);
+                    return response.text();
+                }
+            })
+            .then(data => {
+                console.log('Question created successfully!');
+                console.log('Response data:', data);
+                
+                UIkit.notification({
+                    message: '<span uk-icon="icon: check"></span> Question created successfully!',
+                    status: 'success',
+                    pos: 'top-right',
+                    timeout: 3000
+                });
+                
+                console.log('Reloading DataTable editor...');
+                // Reload the data table to show the new question
+                openDataTableEditor();
+            })
+            .catch(error => {
+                console.error('ERROR creating question!');
+                console.error('Error object:', error);
+                console.error('Error message:', error.message);
+                console.error('Error stack:', error.stack);
+                
+                UIkit.notification({
+                    message: '<span uk-icon="icon: warning"></span> Failed to create question: ' + error.message,
+                    status: 'danger',
+                    pos: 'top-right',
+                    timeout: 5000
+                });
             });
         }
 
